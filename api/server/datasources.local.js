@@ -4,7 +4,7 @@ module.exports = {
     port: 3306,
     connectTimeout: 300000,
     acquireTimeout: 300000,
-    database: 'countofmoney',
+    database: 'tripplanner',
     password: process.env.DB_PASSWORD || 'password',
     name: 'mysql',
     user: process.env.DB_USERNAME || 'root',
