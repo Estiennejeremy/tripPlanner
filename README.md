@@ -10,3 +10,8 @@ Run `docker-compose -f docker-compose.dev.yml build && docker-compose -f docker-
 API documentation runs on : `localhost:8081/explorer/`
 Application runs on : `localhost:8080`
 PHPmyAdmin runs on : `localhost:8089`
+
+## How to go to the current deployed version of the project
+
+API documentation runs on : `https://trip-planner-10-api.herokuapp.com/explorer/`
+Projects runs on : `https://trip-planner-10.herokuapp.com`
