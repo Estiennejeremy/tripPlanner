@@ -1,13 +1,15 @@
 <template>
   <div class="content">
-    <auth-card :connexion="false"></auth-card>
+    <img src="../assets/forest.png" class="image" />
+    <div class="bottom-part" />
+    <auth-card :connexionProp="false"></auth-card>
   </div>
 </template>
 <script>
-import AuthCard from '../components/AuthCard';
+import AuthCard from "../components/AuthCard";
 
 export default {
-  name: 'Connexion',
+  name: "Connexion",
   components: { AuthCard },
   data() {
     return {};
@@ -19,5 +21,19 @@ export default {
 .content {
   display: flex;
   justify-content: center;
+  max-height: 100vh;
+  max-width: 100vw;
+}
+.image {
+  width: 1920px;
+  position: absolute;
+  overflow: hidden !important;
+}
+.bottom-part {
+  background-color: #494949;
+  bottom: 0;
+  height: 40vh;
+  width: 100vw;
+  position: absolute;
 }
 </style>
