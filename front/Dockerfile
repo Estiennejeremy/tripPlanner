@@ -1,0 +1,8 @@
+FROM node:10.24-alpine
+
+WORKDIR /src
+COPY ./ /src
+RUN apk update && apk upgrade && \
+    apk add --no-cache bash git openssh
+RUN npm install
+CMD [ "npm", "run", "serve" ]
