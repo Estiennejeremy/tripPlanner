@@ -26,7 +26,7 @@ export default {
 }
 .image {
   width: 1920px;
-  position: absolute;
+  position: fixed;
   overflow: hidden !important;
 }
 .bottom-part {
