@@ -1,26 +1,37 @@
 {
-  "name": "token",
-  "plural": "tokens",
+  "name": "activity",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {
     "validateUpsert": true
   },
   "properties": {
-    "token": {
+    "id": {
+      "type": "number",
+      "required": true
+    },
+    "name": {
       "type": "string",
       "required": true
     },
-    "created_at": {
-      "type": "date",
+    "type": {
+      "type": "string",
+      "required": true
+    },
+    "address": {
+      "type": "string",
+      "required": true
+    },
+    "price": {
+      "type": "number",
       "required": true
     }
   },
   "validations": [],
   "relations": {
-    "user": {
+    "location": {
       "type": "belongsTo",
-      "model": "user",
+      "model": "location",
       "foreignKey": ""
     }
   },

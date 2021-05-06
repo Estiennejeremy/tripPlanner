@@ -1,17 +1,21 @@
 {
-  "name": "token",
-  "plural": "tokens",
+  "name": "travel",
+  "plural": "travels",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {
     "validateUpsert": true
   },
   "properties": {
-    "token": {
-      "type": "string",
+    "id": {
+      "type": "number",
       "required": true
     },
-    "created_at": {
+    "departDate": {
+      "type": "date",
+      "required": true
+    },
+    "arrivalDate": {
       "type": "date",
       "required": true
     }
@@ -21,6 +25,16 @@
     "user": {
       "type": "belongsTo",
       "model": "user",
+      "foreignKey": ""
+    },
+    "from": {
+      "type": "belongsTo",
+      "model": "location",
+      "foreignKey": ""
+    },
+    "to": {
+      "type": "belongsTo",
+      "model": "location",
       "foreignKey": ""
     }
   },
