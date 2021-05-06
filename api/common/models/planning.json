@@ -1,0 +1,39 @@
+{
+  "name": "planning",
+  "plural": "plannings",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "id": {
+      "type": "number",
+      "required": true
+    },
+    "date": {
+      "type": "date",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "travel": {
+      "type": "belongsTo",
+      "model": "travel",
+      "foreignKey": ""
+    },
+    "activity": {
+      "type": "belongsTo",
+      "model": "activity",
+      "foreignKey": ""
+    },
+    "transport": {
+      "type": "belongsTo",
+      "model": "transport",
+      "foreignKey": ""
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

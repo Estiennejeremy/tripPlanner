@@ -1,0 +1,46 @@
+{
+  "name": "transport",
+  "plural": "transports",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "id": {
+      "type": "number",
+      "required": true
+    },
+    "type": {
+      "type": "string",
+      "required": true
+    },
+    "departDate": {
+      "type": "date",
+      "required": true
+    },
+    "arrivalDate": {
+      "type": "date",
+      "required": true
+    },
+    "price": {
+      "type": "number",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "from": {
+      "type": "belongsTo",
+      "model": "location",
+      "foreignKey": ""
+    },
+    "to": {
+      "type": "belongsTo",
+      "model": "location",
+      "foreignKey": ""
+    }
+  },
+  "acls": [],
+  "methods": {}
+}
