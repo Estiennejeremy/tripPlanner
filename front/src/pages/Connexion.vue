@@ -29,12 +29,12 @@ export default {
   max-width: 100%;
 }
 .image {
-  width: 1920px;
+  width: 100%;
   position: fixed;
   overflow: hidden !important;
 }
 .auth-container {
   z-index: 2;
-  margin-top: 30vh;
+  margin-top: 25vh;
 }
 </style>

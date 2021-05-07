@@ -14,7 +14,7 @@ function authGuard(to, from, next) {
 const routes = [
   {
     path: '/connection',
-    name: 'Connexion',
+    name: 'Connection',
     beforeEnter: authGuard,
     component: Connexion,
   },
