@@ -168,7 +168,7 @@ export default {
         return;
       }
       Cookies.set("token", loginRes.userToken);
-      this.$router.push("home");
+      window.location.href = 'home';
     },
   },
 };
