@@ -1,8 +1,12 @@
 <template>
   <div class="content">
-    <img src="../assets/forest.png" class="image" />
-    <div class="bottom-part" />
-    <auth-card :connexionProp="false"></auth-card>
+    <img src="../assets/landscape2.jpg" class="image" />
+    <vs-row vs-justify="center" class="auth-container">
+        <vs-col type="flex" vs-justify="center" vs-align="center" vs-lg="4" vs-xs="8" vs-sm="4">
+          <auth-card />
+        </vs-col>
+    </vs-row>
+
   </div>
 </template>
 <script>
@@ -21,19 +25,16 @@ export default {
 .content {
   display: flex;
   justify-content: center;
-  max-height: 100vh;
-  max-width: 100vw;
+  max-height: 100%;
+  max-width: 100%;
 }
 .image {
   width: 1920px;
   position: fixed;
   overflow: hidden !important;
 }
-.bottom-part {
-  background-color: #494949;
-  bottom: 0;
-  height: 40vh;
-  width: 100vw;
-  position: absolute;
+.auth-container {
+  z-index: 2;
+  margin-top: 30vh;
 }
 </style>
