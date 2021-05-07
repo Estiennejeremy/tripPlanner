@@ -1,20 +1,31 @@
-import Connexion from "../pages/Connexion.vue";
-import Home from "../pages/Home.vue";
+import Connexion from '../pages/Connexion.vue';
+import Home from '../pages/Home.vue';
+
+import Cookies from 'js-cookie';
+
+function authGuard(to, from, next) {
+  if (!Cookies.get('token')) {
+    next();
+  } else {
+    next('/home');
+  }
+}
 
 const routes = [
   {
-    path: "/connexion",
-    name: "Connexion",
+    path: '/connection',
+    name: 'Connexion',
+    beforeEnter: authGuard,
     component: Connexion,
   },
   {
-    path: "/",
+    path: '/',
     component: Home,
-    redirect: "/home",
+    redirect: '/home',
     children: [
       {
-        path: "/home",
-        name: "Home",
+        path: '/home',
+        name: 'Home',
         component: Home,
       },
     ],

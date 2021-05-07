@@ -1,11 +1,3 @@
 <template>
-  <h1>Home ! Super app !!</h1>
+  <div>coucou</div>
 </template>
-
-<script>
-export default {
-  name: 'Home',
-};
-</script>
-
-<style></style>

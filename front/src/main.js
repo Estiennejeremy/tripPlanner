@@ -8,11 +8,23 @@ import 'vuesax/dist/vuesax.css'; //Vuesax styles
 import routes from './routes/routes';
 
 Vue.config.productionTip = false;
-Vue.use(Vuesax);
+Vue.use(Vuesax, {
+  theme: {
+    colors: {
+      primary: '#00A6A6',
+      // success:'rgb(23, 201, 100)',
+      danger: '#FF4365',
+      // warning:'rgb(255, 130, 0)',
+      // dark:'rgb(36, 33, 69)'
+    },
+  },
+});
+
 Vue.use(VueRouter);
 
 // configure router
 const router = new VueRouter({
+  mode: 'history',
   routes, // short for routes: routes
   linkActiveClass: 'nav-item active',
   scrollBehavior: to => {

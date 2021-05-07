@@ -1,9 +1,8 @@
 <template>
-  <vs-card class="class">
+  <vs-card>
     <h4
       slot="header"
       class="card-title"
-      id="card-title"
       v-if="connexion == true"
     >
       Connection
@@ -11,91 +10,79 @@
     <h4
       slot="header"
       class="card-title"
-      id="card-title"
       v-if="connexion == false"
     >
-      Registration
+      Create an account
     </h4>
-
-    <form>
-      <vs-row v-if="!connexion" class="row">
-        <vs-col vs-offset="3" vs-w="8">
-          <vs-input
-            :success="emailSuccess"
-            :danger="emailError"
-            danger-text="The email is invalid"
-            placeholder="Email"
-            v-model="user.email"
-            @change="isEmailValid"
-          />
-        </vs-col>
+    <vs-row class="card-content" vs-justify="center">
+      <vs-row vs-justify="center" class="input-row" v-if="!connexion">
+        <vs-input
+          :success="emailSuccess"
+          :danger="emailError"
+          danger-text="The email is invalid"
+          placeholder="Email"
+          v-model="user.email"
+          @change="isEmailValid"
+        />
       </vs-row>
-
-      <vs-row class="row">
-        <vs-col vs-offset="3" vs-w="8">
-          <vs-input
-            :success="usernameSuccess"
-            :danger="usernameError"
-            danger-text="The username must be at least 3 characters"
-            placeholder="Username"
-            v-model="user.username"
-            @change="isUsernameValid"
-            type="email"
-          />
-        </vs-col>
+      <vs-row vs-justify="center" class="input-row">
+        <vs-input
+          :success="usernameSuccess"
+          :danger="usernameError"
+          danger-text="The username must be at least 3 characters"
+          placeholder="Username"
+          v-model="user.username"
+          @change="isUsernameValid"
+          type="email"
+        />
       </vs-row>
-      <vs-row class="row">
-        <vs-col vs-offset="3" vs-w="8">
-          <vs-input
-            :success="passwordSuccess"
-            :danger="passwordError"
-            danger-text="The password must be at least 6 characters"
-            placeholder="Password"
-            v-model="user.password"
-            @change="isPasswordValid"
-            type="password"
-          />
-        </vs-col>
+      <vs-row vs-justify="center" class="input-row">
+        <vs-input
+          :success="passwordSuccess"
+          :danger="passwordError"
+          danger-text="The password must be at least 6 characters"
+          placeholder="Password"
+          v-model="user.password"
+          @change="isPasswordValid"
+          type="password"
+        />
       </vs-row>
-      <p class="form-error text-center">{{ formError }}</p>
       <vs-button
         type="relief"
-        :disabled="!isSigninFormValid"
-        @click.prevent="signIn"
         v-if="connexion"
+        @click.prevent="signIn"
+        class="button"
       >
         Connection
       </vs-button>
-
       <vs-button
         type="relief"
-        :disabled="!isSignupFormValid"
         @click.prevent="signUp"
         v-else
+        class="button"
       >
-        Create Profile
+        Create
       </vs-button>
-      <div class="msg" v-if="connexion">
-        Want to create an account ?
-        <p @click.prevent="redirectSigninSignup" class="link">Sign up here</p>
-      </div>
-      <div class="msg" v-else>
-        Already have an account ?
-        <p @click.prevent="redirectSigninSignup" class="link">Sign in here</p>
-      </div>
-    </form>
+      <vs-row class="form-error" vs-justify="center">{{ formError }}</vs-row>
+      <vs-row class="msg" v-if="connexion" vs-justify="center">
+        <vs-row vs-justify="center">Want to create an account ?</vs-row>
+        <p vs-justify="center" @click.prevent="redirectSigninSignup" class="link">Sign up here</p>
+      </vs-row>
+      <vs-row class="msg" v-else vs-justify="center">
+        <vs-row vs-justify="center">Already have an account ?</vs-row>
+        <p vs-justify="center" @click.prevent="redirectSigninSignup" class="link">Sign in here</p>
+      </vs-row>
+    </vs-row>
   </vs-card>
 </template>
 
 <script>
+import { createUser, loginUser } from '../api_wrapper/users.js';
+import Cookies from 'js-cookie';
+
 export default {
   name: "AuthCard",
   components: {},
-  props: {
-    connexionProp: {
-      type: Boolean,
-    },
-  },
   data() {
     return {
       user: {
@@ -104,7 +91,7 @@ export default {
         password: "",
       },
       formError: "",
-      connexion: this.connexionProp,
+      connexion: false,
       emailSuccess: false,
       emailError: false,
       usernameError: false,
@@ -145,49 +132,75 @@ export default {
         this.passwordError = true;
       }
     },
+    isSignupFormValid() {
+      return this.user.username && this.user.password && this.user.email 
+        && this.emailSuccess && this.usernameSuccess && this.passwordSuccess;
+    },
+    isSigninFormValid() {
+      return this.user.username && this.user.password
+        && this.usernameSuccess && this.passwordSuccess;
+    },
     redirectSigninSignup() {
       this.connexion = !this.connexion;
     },
-    signUp() {
+    async signUp() {
+      this.formError = "";
+      if (!this.isSignupFormValid()) {
+        this.formError = "You must correctly fill all fields";
+        return;
+      }
+      const createRes = await createUser(this.user);
+      if (createRes.error) {
+        this.formError = "An error occured while creating your account";
+        return;
+      }
+      this.signIn();
+    },
+    async signIn() {
+      this.formError = "";
+      if (!this.isSigninFormValid()) {
+        this.formError = "You must fill all fields";
+        return;
+      }
+      const loginRes = await loginUser(this.user);
+      if (loginRes.error) {
+        this.formError = "An error occured while trying to sign you up";
+        return;
+      }
+      Cookies.set("token", loginRes.userToken);
       this.$router.push("home");
-    },
-    signIn() {
-      this.$router.push("home");
-    },
-  },
-  computed: {
-    isSigninFormValid() {
-      return this.usernameSuccess && this.passwordSuccess;
-    },
-    isSignupFormValid() {
-      return this.usernameSuccess && this.emailSuccess && this.passwordSuccess;
     },
   },
 };
 </script>
 <style>
-.row {
-  text-align: left;
-  padding: 5px;
+.input-row {
+  margin-bottom: 15px;
 }
-.class {
-  width: 30%;
-  position: absolute;
-  top: 30%;
+.button {
+  margin-top: 10px;
+  width: 100px;
+}
+.card-title {
+  margin: 10px 0 10px 0;
   text-align: center;
-  font-size: 20px;
 }
-#card-title {
-  margin-top: 20px;
+.link {
+  cursor: pointer;
+  color: #00A6A6;
+}
+.link:hover {
+  text-decoration: underline;
 }
 .msg {
   padding: 20px;
 }
-.link {
-  cursor: pointer;
-  color: #1dc7ea;
+.card-content {
+  padding-top: 20px;
 }
-.link:hover {
-  text-decoration: underline;
+.form-error {
+  color: rgba(var(--vs-danger),1) !important;
+  font-size: .65rem;
+  margin-top: 8px;
 }
 </style>
