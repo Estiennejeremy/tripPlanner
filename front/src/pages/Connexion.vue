@@ -18,12 +18,6 @@ export default {
 };
 </script>
 <style>
-.content {
-  display: flex;
-  justify-content: center;
-  max-height: 100vh;
-  max-width: 100vw;
-}
 .image {
   width: 1920px;
   position: fixed;

@@ -15,4 +15,10 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+.content {
+  display: flex;
+  justify-content: center;
+  max-height: 100vh;
+  max-width: 100vw;
+}
 </style>
