@@ -27,4 +27,10 @@ h1, h2, h3, h4 {
 p, span, input {
   font-family: Avenir;
 }
+.content {
+  display: flex;
+  justify-content: center;
+  max-height: 100vh;
+  max-width: 100vw;
+}
 </style>
