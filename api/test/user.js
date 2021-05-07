@@ -23,6 +23,19 @@ var getUser = (id, callback) => {
         .end(callback)
 }
 
+var createUser = (data, callback) => {
+    chai.request(url)
+            .post("register")
+            .send(data)
+            .end(callback);
+}
+
+var getUser = (id, callback) => {
+    chai.request(url)
+        .get("/" + id)
+        .end(callback)
+}
+
 describe('[POST] /register', function() {
     it('should create new user', function(done) {
         let email = Math.random().toString(36).substring(7),
