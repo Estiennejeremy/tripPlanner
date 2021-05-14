@@ -1,12 +1,10 @@
 <template>
-  <div>
-    home
-  </div>
+  <div>Trips</div>
 </template>
 
 <script>
-
 export default {
+  name: "TripsPage",
 }
 </script>
 

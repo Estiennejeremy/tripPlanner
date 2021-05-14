@@ -1,5 +1,6 @@
 import Connexion from '../pages/Connexion.vue';
 import Home from '../pages/Home.vue';
+import TripsPage from '../pages/TripsPage.vue';
 
 import Cookies from 'js-cookie';
 
@@ -20,16 +21,27 @@ const routes = [
   },
   {
     path: '/',
+    name: 'Home',
     component: Home,
-    redirect: '/home',
-    children: [
-      {
-        path: '/home',
-        name: 'Home',
-        component: Home,
-      },
-    ],
   },
+  {
+    path: '/trips',
+    name: 'Trips',
+    component: TripsPage,
+  },
+  // {
+  //   path: '/',
+  //   component: Home,
+  //   redirect: '/home',
+  //   children: [
+  //     {
+  //       path: '/home',
+  //       name: 'Home',
+  //       component: Home,
+  //     },
+
+  // ],
+  // },
   //   { path: '*', component: NotFound },
 ];
 
