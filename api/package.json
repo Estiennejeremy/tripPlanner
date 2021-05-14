@@ -8,7 +8,7 @@
   "scripts": {
     "lint": "eslint .",
     "start": "node .",
-    "test": "mocha",
+    "test": "nyc mocha",
     "dev": "nodemon ."
   },
   "dependencies": {
@@ -22,6 +22,7 @@
     "loopback-component-explorer": "^6.2.0",
     "loopback-connector-mysql": "^6.0.0",
     "mocha": "^8.4.0",
+    "nyc": "^15.1.0",
     "request-promise-native": "^1.0.9",
     "serve-favicon": "^2.0.1",
     "sha1": "^1.1.1",
