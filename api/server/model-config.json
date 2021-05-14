@@ -29,10 +29,6 @@
     "dataSource": "mysql",
     "public": true
   },
-  "country": {
-    "dataSource": "mysql",
-    "public": true
-  },
   "planning": {
     "dataSource": "mysql",
     "public": true
