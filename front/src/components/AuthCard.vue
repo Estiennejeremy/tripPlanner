@@ -20,7 +20,7 @@
           :success="emailSuccess"
           :danger="emailError"
           danger-text="The email is invalid"
-          placeholder="Email"
+          label-placeholder="Email"
           v-model="user.email"
           @change="isEmailValid"
         />
@@ -30,7 +30,7 @@
           :success="usernameSuccess"
           :danger="usernameError"
           danger-text="The username must be at least 3 characters"
-          placeholder="Username"
+          label-placeholder="Username"
           v-model="user.username"
           @change="isUsernameValid"
           type="email"
@@ -41,7 +41,7 @@
           :success="passwordSuccess"
           :danger="passwordError"
           danger-text="The password must be at least 6 characters"
-          placeholder="Password"
+          label-placeholder="Password"
           v-model="user.password"
           @change="isPasswordValid"
           type="password"
@@ -168,7 +168,7 @@ export default {
         return;
       }
       Cookies.set("token", loginRes.userToken);
-      window.location.href = 'home';
+      window.location.href = '/';
     },
   },
 };

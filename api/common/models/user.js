@@ -52,6 +52,35 @@ module.exports = function (User) {
     }
   };
 
+  User.updateUser = async function (data) {
+    try {
+      if (!data.username || !data.password || !data.email)
+        return { error: 'Missing credentials' };
+      const checkUser = await User.findOne({
+        where: { username: data.username },
+      });
+      const checkAvailableEmail = await User.findOne({
+        where: { email: data.email },
+      });
+      if (!checkUser) return { error: 'User not found' };
+      if (
+        checkAvailableEmail &&
+        checkUser.username !== checkAvailableEmail.username
+      )
+        return { error: 'Email not available' };
+      if (checkUser.password_hash !== data.password) {
+        data.password = sha1(data.password);
+      }
+      const userRes = await User.update({
+        password_hash: data.password,
+        email: data.email,
+      });
+      return { success: 'Successfuly updated' };
+    } catch (e) {
+      return { error: 'An error occured' };
+    }
+  };
+
   User.remoteMethod('login', {
     accepts: [{ arg: 'data', type: 'object', http: { source: 'body' } }],
     returns: { type: 'object', root: true },
@@ -62,5 +91,11 @@ module.exports = function (User) {
     accepts: [{ arg: 'data', type: 'object', http: { source: 'body' } }],
     returns: { type: 'object', root: true },
     http: { verb: 'POST' },
+  });
+
+  User.remoteMethod('updateUser', {
+    accepts: [{ arg: 'data', type: 'object', http: { source: 'body' } }],
+    returns: { type: 'object', root: true },
+    http: { verb: 'PUT' },
   });
 };

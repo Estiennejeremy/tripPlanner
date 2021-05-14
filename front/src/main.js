@@ -12,7 +12,7 @@ Vue.use(Vuesax, {
   theme: {
     colors: {
       primary: '#00A6A6',
-      // success:'rgb(23, 201, 100)',
+      success: '#76B041',
       danger: '#FF4365',
       // warning:'rgb(255, 130, 0)',
       // dark:'rgb(36, 33, 69)'

@@ -24,4 +24,7 @@ export default {
 h1, h2, h3, h4 {
   font-family: 'Poppins', sans-serif;
 }
+p, span, input {
+  font-family: Avenir;
+}
 </style>
