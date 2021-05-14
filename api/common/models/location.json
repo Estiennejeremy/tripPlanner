@@ -11,7 +11,15 @@
       "type": "number",
       "required": true
     },
-    "address": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "lon": {
+      "type": "string",
+      "required": true
+    },
+    "lat": {
       "type": "string",
       "required": true
     }

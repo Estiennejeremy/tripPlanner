@@ -8,10 +8,6 @@ module.exports = function (app) {
     if (err) throw err;
     console.log('Autoupdated table `Users`.\n');
   });
-  mysql.autoupdate('country', function (err) {
-    if (err) throw err;
-    console.log('Autoupdated table `Country`.\n');
-  });
   mysql.autoupdate('location', function (err) {
     if (err) throw err;
     console.log('Autoupdated table `Location`.\n');
