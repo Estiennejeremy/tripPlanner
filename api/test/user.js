@@ -2,17 +2,14 @@ var assert = require('assert');
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const url = "http://localhost:8081/api/users/"
-var User = require('../common/models/user');
 var sha1 = require('sha1');
 const { expect, should } = require('chai');
 
 chai.use(chaiHttp);
-
 var deleteUser = (id) => {
     chai.request(url)
         .delete("/" + id);
 }
-
 var createUser = (data, callback) => {
     chai.request(url)
             .post("register")
