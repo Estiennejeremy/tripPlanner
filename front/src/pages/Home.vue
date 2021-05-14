@@ -1,90 +1,110 @@
 <template>
   <div class="content">
-    <Header title="Trip planner" />
-    <img src="../assets/london.jpg" alt="" id="img" />
-    <vs-card class="class card">
+    <img src="../assets/landscape5.jpg" alt="" id="img" />
+    <vs-card class="card" id="font">
       <vs-tabs alignment="center">
-        <vs-tab label="What to do there">
-          <form>
-            <vs-row vs-justify="space-evenly" vs-w="12">
-              <vs-col vs-type="flex" vs-w="3">
-                <vs-input placeholder="Address" />
-              </vs-col>
-              <vs-col vs-type="flex" vs-w="3">
-                <vs-select v-model="selectedType" placeholder="Type" >
-                  <vs-select-item
-                    :key="index"
-                    :value="item.value"
-                    :text="item.text"
-                    v-for="(item, index) in types"
-                  />
-                </vs-select>
-              </vs-col>
-              <vs-col vs-type="flex" vs-w="3">
-                <vs-input type="date" :min=getDate :value=getDate id="date" />
-              </vs-col>
-            </vs-row>
-          </form>
-        </vs-tab>
-        <vs-tab label="How to get there">
-          <form>
-            <vs-row vs-justify="space-evenly" vs-w="12">
-              <vs-col vs-type="flex" vs-w="3">
-                <vs-input placeholder="From" />
-              </vs-col>
-              <vs-col vs-type="flex" vs-w="3">
-                <vs-input placeholder="To" />
-              </vs-col>
-              <vs-col vs-type="flex" vs-w="3">
-                <vs-select v-model="selectedType" placeholder="Type" >
-                  <vs-select-item
-                    :key="index"
-                    :value="item.value"
-                    :text="item.text"
-                    v-for="(item, index) in types"
-                  />
-                </vs-select>
-              </vs-col>
-              <vs-col vs-type="flex" vs-w="3">
-                <vs-input type="date" :min=getDate :value=getDate id="date" />
-              </vs-col>
-            </vs-row>
-          </form>
-        </vs-tab>
-          <vs-button type="relief">
+        <vs-tab label="What to do there" id="font">
+          <vs-row vs-justify="space-evenly" vs-lg="12" vs-sm="12">
+            <vs-col vs-type="flex" vs-lg="3" vs-sm="3" vs-xs="10" vs-justify="center">
+              <vs-input label="City" v-model="place"/>
+            </vs-col>
+            <vs-col vs-type="flex" vs-lg="3" vs-sm="3" vs-xs="10" vs-justify="center">
+              <vs-select v-model="selectedType"  label="Activity">
+                <vs-select-item
+                  :key="index"
+                  :value="item.value"
+                  :text="item.text"
+                  v-for="(item, index) in activityTypes"
+                />
+              </vs-select>
+            </vs-col>
+            <vs-col vs-type="flex" vs-lg="3" vs-sm="3" vs-xs="10" vs-justify="center">
+              <vs-input type="date" :min="getDate" :value="getDate" label="Date"  v-model="selectedDate"/>
+            </vs-col>
+          </vs-row>
+          <vs-row vs-justify="center">
+          <vs-button type="relief" id="font" v-on:click="searchActivity()">
             Search
           </vs-button>
+        </vs-row>
+        </vs-tab>
+        <vs-tab label="How to get there" id="font">
+          <vs-row vs-justify="space-evenly" vs-lg="12" vs-sm="12">
+            <vs-col vs-type="flex" vs-lg="3" vs-sm="3" vs-xs="10" vs-justify="center">
+              <vs-input label="From" v-model="from"/>
+            </vs-col>
+            <vs-col vs-type="flex" vs-lg="3" vs-sm="3" vs-xs="10" vs-justify="center">
+              <vs-input label="To" v-model="to"/>
+            </vs-col>
+            <vs-col vs-type="flex" vs-lg="3" vs-sm="3" vs-xs="10" vs-justify="center">
+              <vs-select v-model="selectedType" label="Transportation">
+                <vs-select-item
+                  :key="index"
+                  :value="item.value"
+                  :text="item.text"
+                  v-for="(item, index) in transportTypes"
+                />
+              </vs-select>
+            </vs-col>
+            <vs-col vs-type="flex" vs-lg="3" vs-sm="3" vs-xs="10" vs-justify="center">
+              <vs-input type="date" :min="getDate" :value="getDate" id="date" label="Date" v-model="selectedDate"/>
+            </vs-col>
+          </vs-row>
+          <vs-row vs-justify="center">
+          <vs-button type="relief" id="font" v-on:click="searchTransport()">
+            Search
+          </vs-button>
+        </vs-row>
+        </vs-tab>
       </vs-tabs>
     </vs-card>
-    <footer id="footer">
-      <h3>
-        Le slogan du siècle 21
-      </h3>
-    </footer>
+    <Footer/>
   </div>
 </template>
 
 <script>
-import Header from "../components/Header.vue";
+import Footer from '../components/Footer.vue';
 
 export default {
   name: "Home",
-  components: { Header },
+  components: { Footer },
   data() {
     return {
-      types: [
-        { value: "restaurant", text: "restaurant" },
-        { value: "hotel", text: "hotel" },
-        { value: "bar", text: "bar" },
+      activityTypes: [
+        { value: "restaurant", text: "Restaurant" },
+        { value: "hotel", text: "Hotel" },
+        { value: "bar", text: "Bar" },
+      ],
+      transportTypes: [
+        { value: "train", text: "Train" },
+        { value: "bus", text: "Bus" },
+        { value: "plane", text: "Plane" },
       ],
       selectedType: "",
+      place: "",
+      to: "",
+      from: "",
+      selectedDate: "",
     };
   },
   computed: {
     getDate() {
-      return new Date().toISOString().split('T')[0];
+      return new Date().toISOString().split("T")[0];
+    },
+  },
+  methods: {
+    searchActivity() {
+      console.log("selectedType:", this.selectedType)
+      console.log("place: ", this.place)
+      console.log("date: ", this.selectedDate)
+    },
+    searchTransport() {
+      console.log("selectedType:", this.selectedType)
+      console.log("to: ", this.to)
+      console.log("from: ", this.from)
+      console.log("date: ", this.selectedDate)
     }
-  }
+  },
 };
 </script>
 
@@ -111,27 +131,16 @@ export default {
 }
 
 .card {
-  width: 800px;
+  min-width: 80vw;
+  width: 1000px;
 }
 
-.btn {
-  margin-top: 10px;
-}
-
-#date {
+#font {
   font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-size: medium;
 }
 
-#footer {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 50px;
-  background-color: #141414;
-  color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+::label{
+  font-size: large
 }
 </style>
