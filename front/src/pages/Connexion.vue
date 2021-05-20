@@ -1,6 +1,6 @@
 <template>
   <div class="content">
-    <img src="../assets/landscape2.jpg" class="image" />
+    <img src="/landscape2.jpg" class="image" />
     <vs-row vs-justify="center" class="auth-container">
         <vs-col type="flex" vs-justify="center" vs-align="center" vs-lg="4" vs-xs="8" vs-sm="4">
           <auth-card />

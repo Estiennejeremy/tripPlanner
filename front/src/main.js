@@ -2,12 +2,14 @@ import Vue from 'vue';
 import App from './App.vue';
 import Vuesax from 'vuesax';
 import VueRouter from 'vue-router';
-
+import VueMapbox from '@studiometa/vue-mapbox-gl';
+import 'mapbox-gl/dist/mapbox-gl.css';
 import 'vuesax/dist/vuesax.css'; //Vuesax styles
 
 import routes from './routes/routes';
 
 Vue.config.productionTip = false;
+Vue.use(VueMapbox);
 Vue.use(Vuesax, {
   theme: {
     colors: {
