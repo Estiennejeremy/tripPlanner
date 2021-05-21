@@ -194,8 +194,12 @@ export default {
     },
   },
   methods: {
-    searchActivity() {},
-    searchTransport() {},
+    searchActivity() {
+      window.location.href = "/search/activity";
+    },
+    searchTransport() {
+      window.location.href = "/search/transport";
+    },
     getFromLocation(res) {
       this.from = {
         lat: res.result.center[1],
