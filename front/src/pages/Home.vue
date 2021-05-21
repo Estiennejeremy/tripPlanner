@@ -262,8 +262,4 @@ export default {
   background-color: white;
   border-radius: 6px;
 }
-
-::label {
-  /* font-size: large; */
-}
 </style>
