@@ -10,10 +10,10 @@ module.exports = function(Transport) {
     (Transport.getDirections = async function (req, waypoints, type) {
         try {
          let allLoca = [];
-          var app = Location.app;
+          var app = Transport.app;
           const res = await request({
             method: 'GET',
-            uri: 'https://api.mapbox.com/directions/v5/mapbox/' + type +'/'+ waypoints +'.json' ,
+            uri: 'https://api.mapbox.com/directions/v5/mapbox/' + type +'/'+ waypoints,
             qs: {
               access_token: apiKey
             },
