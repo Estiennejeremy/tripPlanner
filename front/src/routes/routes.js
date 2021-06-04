@@ -2,6 +2,8 @@ import Connexion from '../pages/Connexion.vue';
 import Home from '../pages/Home.vue';
 import TripsPage from '../pages/TripsPage.vue';
 import TripPage from '../pages/TripPage.vue';
+import SearchPage from '../pages/Search.vue';
+
 import Cookies from 'js-cookie';
 
 function authGuard(to, from, next) {
@@ -33,6 +35,20 @@ const routes = [
     path: '/trip',
     name: 'Trip',
     component: TripPage,
+  },
+  {
+    path: '/search/activity',
+    name: 'SearchActivity',
+    component: SearchPage,
+  },
+  {
+    path: '/search/transport',
+    name: 'SearchTransport',
+    component: SearchPage,
+  },
+  {
+    path: '/search',
+    redirect: '/search/activity',
   },
   // {
   //   path: '/',

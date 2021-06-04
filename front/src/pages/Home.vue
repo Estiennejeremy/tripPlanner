@@ -194,8 +194,18 @@ export default {
     },
   },
   methods: {
-    searchActivity() {},
-    searchTransport() {},
+    searchActivity() {
+      this.$router.push({
+        name: "SearchActivity",
+        params: { types: "activity" },
+      });
+    },
+    searchTransport() {
+      this.$router.push({
+        name: "SearchTransport",
+        params: { types: "transport" },
+      });
+    },
     getFromLocation(res) {
       this.from = {
         lat: res.result.center[1],
@@ -258,8 +268,6 @@ export default {
 }
 
 .places-input {
-  margin-bottom: 3px;
-  background-color: white;
   border-radius: 6px;
 }
 
@@ -270,5 +278,9 @@ export default {
 
 .vs-tabs--btn {
   font-weight: 600;
+}
+
+.mapboxgl-ctrl-geocoder {
+  width: 100%;
 }
 </style>

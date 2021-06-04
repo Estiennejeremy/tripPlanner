@@ -13,7 +13,7 @@
         <br>
         <span>From {{ tripInfos.startLocation }} to {{ tripInfos.endLocation }}</span>
       </div>
-      <div slot="footer">
+      <div slot="footer" v-if="!noButton">
         <vs-row vs-justify="flex-end">
           <vs-button 
             color="primary"
@@ -51,6 +51,7 @@ export default {
       type: String,
       required: true,
     },
+    noButton: Boolean
   },
   methods: {
     goToTrip() {
