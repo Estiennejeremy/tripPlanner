@@ -56,7 +56,6 @@ export default {
   },
   methods: {
     openModal() {
-      console.log("in open")
       this.openTripModal = true;
     },
     closeModal() {

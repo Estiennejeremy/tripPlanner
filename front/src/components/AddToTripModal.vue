@@ -84,7 +84,6 @@ export default {
     },
   },
   async mounted() {
-    console.log("hello")
     this.user = await getUserByToken(Cookies.get("token"));
     const trips = await getUserTripsByUserId(this.user.id);
     await this.formatTrips(trips);
