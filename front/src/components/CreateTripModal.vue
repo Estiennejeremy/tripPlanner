@@ -5,13 +5,13 @@
           :danger="nameError"
           label="Name"
           v-model="trip.name"
+          maxlength="38"
         />
       </vs-row>
       <vs-row vs-justify="center" class="input">
         <div class="vs-component vs-con-input-label vs-input vs-input-primary">
           <label for="" class="vs-input--label">From</label>
           <mapbox-geocoder
-          class="lol"
             access-token="pk.eyJ1IjoidGlmYWluZWsiLCJhIjoiY2tvbzl5ODZqMDlqOTJ5bnVxb3Z0dWNtNyJ9.EsQKq2Ll_f7hmDaY_DCflA"
             @mb-created="instance => control = instance"
             types="place"

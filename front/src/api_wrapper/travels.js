@@ -49,3 +49,17 @@ export async function deleteTripById(tripId) {
     return { error: e };
   }
 }
+
+export async function getTripById(tripId) {
+  try {
+    const res = await fetch(`${config.api_url}/travels/${tripId}`, {
+      method: 'GET',
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+    });
+    return await res.json();
+  } catch (e) {
+    return { error: e };
+  }
+}
