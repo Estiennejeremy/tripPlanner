@@ -93,12 +93,13 @@ export default {
   transition: transform 0.2s, box-shadow 0.2s, background 0.1s;
 }
 .background-black {
+  z-index: 10;
   background-color: #222222;
 }
 .profile-icon {
   position: absolute !important;
   top: 20px;
-  right: 100px;
+  right: 5%;
   cursor: pointer;
 }
  .a-icon {
