@@ -11,7 +11,7 @@
       <div>
         <span>Dates : {{ tripInfos.startDate }} to {{ tripInfos.endDate }}</span>
         <br>
-        <span>From : {{ tripInfos.startLocation }} to {{ tripInfos.endLocation }}</span>
+        <span>From {{ tripInfos.startLocation }} to {{ tripInfos.endLocation }}</span>
       </div>
       <div slot="footer">
         <vs-row vs-justify="flex-end">
@@ -54,7 +54,7 @@ export default {
   },
   methods: {
     goToTrip() {
-      this.$router.push(`/trip/${this.tripId}`);
+      this.$router.push(`/trip?id=${this.tripId}`);
     },
     async deleteTrip() {
       await deleteTripById(this.tripId);
