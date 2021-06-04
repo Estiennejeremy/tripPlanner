@@ -134,4 +134,13 @@ export default {
   margin-top: 8px;
   font-family: Avenir;
 }
+
+.input-row {
+  font-family: Avenir !important;
+  margin-bottom: 20px;
+}
+
+.button {
+  width: 150px;
+}
 </style>
