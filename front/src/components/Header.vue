@@ -6,7 +6,7 @@
       @mouseleave="hover = false"
       :class="{ hover: hover }"
     >
-      <vs-row v-if="isSearchPage" vs-justify="center">
+      <vs-row v-if="isSearchPage" vs-justify="center" class="search">
         <vs-col
           v-if="isActivityPage"
           vs-type="flex"
@@ -33,7 +33,7 @@
           vs-xs="3"
           vs-justify="center"
         >
-          <label class="title">From</label>
+          <label class="label">From</label>
           <mapbox-geocoder
             access-token="pk.eyJ1IjoidGlmYWluZWsiLCJhIjoiY2tvbzl5ODZqMDlqOTJ5bnVxb3Z0dWNtNyJ9.EsQKq2Ll_f7hmDaY_DCflA"
             @mb-created="(instance) => (control = instance)"
@@ -55,8 +55,7 @@
           vs-xs="3"
           vs-justify="center"
         >
-          <label class="vs-input--label title">To</label>
-
+          <label class="label">To</label>
           <mapbox-geocoder
             access-token="pk.eyJ1IjoidGlmYWluZWsiLCJhIjoiY2tvbzl5ODZqMDlqOTJ5bnVxb3Z0dWNtNyJ9.EsQKq2Ll_f7hmDaY_DCflA"
             @mb-created="(instance) => (control = instance)"
@@ -159,7 +158,7 @@ export default {
     },
     logout() {
       Cookies.remove("token");
-      window.location.href = "connection";
+      this.goToHomepage();
     },
     goToHomepage() {
       this.$router.push("/");
@@ -215,6 +214,12 @@ export default {
   color: white;
   font-size: 30px;
 }
+.label {
+  color: white;
+  font-size: 15px;
+  align-self: center;
+  padding-right: 10px
+}
 .header {
   background-color: #222222;
   padding: 10px;
@@ -258,5 +263,8 @@ export default {
   padding-top: 25px !important;
   padding-left: 15px !important;
   padding-right: 15px !important;
+}
+.search{
+  margin-right: 30px
 }
 </style>

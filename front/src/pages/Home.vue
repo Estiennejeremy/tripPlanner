@@ -195,10 +195,16 @@ export default {
   },
   methods: {
     searchActivity() {
-      window.location.href = "/search/activity";
+      this.$router.push({
+        name: "SearchActivity",
+        params: { types: "activity" },
+      });
     },
     searchTransport() {
-      window.location.href = "/search/transport";
+      this.$router.push({
+        name: "SearchTransport",
+        params: { types: "transport" },
+      });
     },
     getFromLocation(res) {
       this.from = {
@@ -262,8 +268,6 @@ export default {
 }
 
 .places-input {
-  margin-bottom: 3px;
-  background-color: white;
   border-radius: 6px;
 }
 
@@ -274,5 +278,9 @@ export default {
 
 .vs-tabs--btn {
   font-weight: 600;
+}
+
+.mapboxgl-ctrl-geocoder {
+  width: 100%;
 }
 </style>

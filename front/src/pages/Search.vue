@@ -9,34 +9,62 @@
         vs-lg="4"
         vs-xs="12"
       >
-        <vs-card class="search-bar">
-          <div slot="header" v-if="this.$props.type === 'activity'">
-            <h3>
-              Activity
-            </h3>
+        <vs-card class="search-bar" style="display: block">
+          <div slot="header">
+            <vs-row vs-type="flex" vs-justify="space-evenly" vs-w="12">
+              <vs-col v-if="isActivity" vs-justify="space-between" vs-w="9">
+                <vs-row id="font">
+                  <vs-checkbox v-model="activities" id="font"
+                    >Activities</vs-checkbox
+                  >
+                  <vs-checkbox v-model="restaurants" id="font"
+                    >Restaurants</vs-checkbox
+                  >
+                  <vs-checkbox v-model="hotels" id="font">Hotels</vs-checkbox>
+                  <vs-checkbox v-model="bars" id="font">Bars</vs-checkbox>
+                </vs-row>
+              </vs-col>
+              <vs-col
+                v-if="isTransport"
+                vs-justify="space-evenly"
+                vs-lg="8"
+                vs-sm="8"
+              >
+                <vs-row>
+                  <vs-checkbox v-model="plane">Plane</vs-checkbox>
+                  <vs-checkbox v-model="train">Train</vs-checkbox>
+                  <vs-checkbox v-model="car">Car</vs-checkbox>
+                  <vs-checkbox v-model="boat">Boat</vs-checkbox>
+                </vs-row>
+              </vs-col>
+
+              <vs-col vs-justify="center" vs-w="2">
+                <vs-switch
+                  v-model="switchStatus"
+                  v-on:click="switchType"
+                  class="switch-type"
+                >
+                  <template #off>
+                    Transports
+                  </template>
+                  <template #on>
+                    Activities
+                  </template>
+                </vs-switch>
+              </vs-col>
+            </vs-row>
           </div>
           <div>
-            <span
-              >Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.</span
-            >
-            <span
-              >Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.</span
-            >
-          </div>
-          <div slot="header" v-if="this.$props.type === 'transport'">
-            <h3>
-              Transport
-            </h3>
+            <activity-search-card
+              v-if="isActivity"
+              title="Test Activity"
+              imgSrc="https://img-19.ccm2.net/8vUCl8TXZfwTt7zAOkBkuDRHiT8=/1240x/smart/b829396acc244fd484c5ddcdcb2b08f3/ccmcms-commentcamarche/20494859.jpg"
+            />
+            <transport-search-card v-else />
           </div>
         </vs-card>
       </vs-col>
-      <vs-col vs-w="8" vs-lg="8" vs-xs="12">
+      <vs-col vs-w="8" vs-lg="8" vs-xs="3">
         <div id="mapbox" class="map" />
       </vs-col>
     </vs-row>
@@ -44,21 +72,43 @@
 </template>
 <script>
 const mapboxgl = require("mapbox-gl/dist/mapbox-gl.js");
+import ActivitySearchCard from "../components/ActivitySearchCard.vue";
+import TransportSearchCard from "../components/TransportSearchCard.vue";
 
 export default {
   name: "Search",
+  components: { ActivitySearchCard, TransportSearchCard },
   data() {
-    return {};
+    return {
+      restaurants: true,
+      hotels: true,
+      bars: true,
+      activities: true,
+      plane: true,
+      train: true,
+      car: true,
+      boat: true,
+      switchStatus: "",
+    };
   },
-  props : {
-    type: {
-        type: String,
-        required: true
-    }
+  methods: {
+    switchType() {
+      if (this.$route.name == "SearchActivity") {
+        this.$router.replace("/search/transport");
+      } else {
+        this.$router.replace("/search/activity");
+      }
+    },
   },
-  methods: {},
+  computed: {
+    isActivity() {
+      return this.$route.name == "SearchActivity";
+    },
+    isTransport() {
+      return this.$route.name == "SearchTransport";
+    },
+  },
   mounted() {
-      console.log(this.$props.type)
     mapboxgl.accessToken =
       "pk.eyJ1IjoidHJpcHBsYW5uZXIxMCIsImEiOiJja295M2dmajMwYjVqMnhxbms3MDJiZ2d5In0.LmgJtpjSjypFMvpvGj2UTA";
     const map = new mapboxgl.Map({
@@ -67,6 +117,8 @@ export default {
       center: [-74.5, 40],
       zoom: 9,
     });
+    if (this.$route.name == "SearchActivity") this.switchStatus = true;
+    else this.switchStatus = false;
   },
 };
 </script>
@@ -81,8 +133,41 @@ export default {
 }
 
 .row {
-    height: 91vh;
-    width: 100vw;
-    overflow: hidden !important;
+  height: 94vh;
+  width: 100vw;
+  overflow: hidden !important;
+}
+
+.switch-type {
+  width: 100px !important;
+  font-size: x-large;
+  background-color: rgb(0, 166, 166);
+}
+
+/* CSS for search cards  */
+.add-icon {
+  position: absolute;
+  margin-right: 10px;
+  right: 0;
+  cursor: pointer;
+}
+
+.card-content {
+  width: 100%;
+  height: fit-content;
+  background: #fff;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  -webkit-box-shadow: 0 4px 25px 0 rgb(0 0 0 / 10%);
+  box-shadow: 0 4px 25px 0 rgb(0 0 0 / 10%);
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+  padding-top: 0px;
+  padding: 10px;
+  position: relative;
+}
+
+.vs-switch--text.text-off {
+  color: white !important;
 }
 </style>

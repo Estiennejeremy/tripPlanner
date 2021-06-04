@@ -102,6 +102,8 @@ export default {
 }
 .click {
   cursor: pointer;
+  margin-left: 5px;
+  margin-right: 5px;
 }
 #add-icon {
   align-content: center;

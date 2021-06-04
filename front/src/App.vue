@@ -33,4 +33,17 @@ p, span, input {
   max-height: 100vh;
   max-width: 100vw;
 }
+
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+}
+::-moz-placeholder { /* Firefox 19+ */
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+}
+:-ms-input-placeholder { /* IE 10+ */
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+}
+:-moz-placeholder { /* Firefox 18- */
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+}
 </style>
