@@ -77,8 +77,8 @@ export default {
         formattedTrip.title = trip.name.charAt(0).toUpperCase() + trip.name.slice(1);
         formattedTrip.id = trip.id.toString();
         formattedTrip.infos = {
-          startLocation: "Start",
-          endLocation: "End",
+          startLocation: (await getLocationById(trip.fromId)).name,
+          endLocation: (await getLocationById(trip.toId)).name,
           startDate: (new Date(trip.arrivalDate)).toLocaleDateString("fr-FR"),
           endDate: (new Date(trip.departDate)).toLocaleDateString("fr-FR")
         };

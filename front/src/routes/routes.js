@@ -1,6 +1,8 @@
 import Connexion from '../pages/Connexion.vue';
 import Home from '../pages/Home.vue';
 import TripsPage from '../pages/TripsPage.vue';
+import TripPage from '../pages/TripPage.vue';
+import SearchPage from '../pages/Search.vue';
 
 import Cookies from 'js-cookie';
 
@@ -28,6 +30,25 @@ const routes = [
     path: '/trips',
     name: 'Trips',
     component: TripsPage,
+  },
+  {
+    path: '/trip',
+    name: 'Trip',
+    component: TripPage,
+  },
+  {
+    path: '/search/activity',
+    name: 'SearchActivity',
+    component: SearchPage,
+  },
+  {
+    path: '/search/transport',
+    name: 'SearchTransport',
+    component: SearchPage,
+  },
+  {
+    path: '/search',
+    redirect: '/search/activity',
   },
   // {
   //   path: '/',
