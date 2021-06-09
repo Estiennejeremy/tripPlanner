@@ -31,18 +31,18 @@ module.exports = function(Location) {
 
             });
             if(location != null && raw.place_type == "poi") {
-              console.log(raw.properties)
               let activity = await app.models.Activity.findOrCreate({
-                where: {location: location}
+                where: {name: raw.place_name}
             },
             {
               name: raw.place_name,
               type: raw.properties.category,
               address: raw.properties.address,
-              location: location,
+              locationId: location[0].id,
               price: 0
             })
-            console.log(activity)
+
+            location[0].activity = activity[0];
           }
           
             allLoca.push(location[0])
