@@ -10,23 +10,21 @@
       <vs-col vs-w="4" vs-justify="center" vs-align="center" vs-type="flex">
         <img :src="imgSrc" class="img-slot" />
       </vs-col>
-      <vs-col vs-w="8">
+      <vs-col vs-w="8" class="activity-infos">
         <vs-row
-          vs-type="flex"
-          vs-justify="center"
           vs-align="center"
           class="card-header"
         >
-          <h3>{{ title }}</h3>
+          <h2>{{ title }}</h2>
         </vs-row>
         <vs-row class="description">
           <p id="font">Description</p>
         </vs-row>
         <vs-row id="font" class="card-footer" vs-align="flex-end">
-          <vs-col vs-type="flex" vs-justify="center" vs-align="center" vs-w="6"
+          <vs-col vs-type="flex" vs-align="center" vs-w="3"
             >Prix</vs-col
           >
-          <vs-col vs-type="flex" vs-justify="center" vs-align="center" vs-w="6"
+          <vs-col vs-type="flex" vs-align="center" vs-w="3"
             >Type de lieu</vs-col
           >
         </vs-row>
@@ -102,11 +100,20 @@ export default {
   box-shadow: 0 4px 25px 0 rgb(0 0 0 / 10%);
   -webkit-transition: all 0.3s ease;
   transition: all 0.3s ease;
-  padding-top: 0px;
+  padding: 10px;
+  position: relative;
+}
+.card-footer {
   padding: 5px;
+  position: absolute;
+  bottom: 5%;
+  max-width: 400px;
 }
 
 .click {
   cursor: pointer;
+}
+.activity-infos {
+  padding-left: 10px;
 }
 </style>
