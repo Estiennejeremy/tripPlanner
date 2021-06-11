@@ -7,7 +7,6 @@ module.exports = function (Travel) {
       if (!data.name || !data.from || !data.to || !data.dates || !data.userId) {
         return { error: 'Missing credentials' };
       }
-      
 
       const existingTravel = await Travel.findOne({
         where: { name: data.name, userId: data.userId },
@@ -24,7 +23,6 @@ module.exports = function (Travel) {
           lat: data.from.lat,
         },
       );
-
       const toLocation = await app.models.Location.findOrCreate(
         { where: { name: data.to.name } },
         {
