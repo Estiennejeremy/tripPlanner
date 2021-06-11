@@ -14,6 +14,14 @@ function authGuard(to, from, next) {
   }
 }
 
+function nonAuthGuard(to, from, next) {
+  if (Cookies.get('token')) {
+    next();
+  } else {
+    next('/connection');
+  }
+}
+
 const routes = [
   {
     path: '/connection',
@@ -29,11 +37,13 @@ const routes = [
   {
     path: '/trips',
     name: 'Trips',
+    beforeEnter: nonAuthGuard,
     component: TripsPage,
   },
   {
     path: '/trip',
     name: 'Trip',
+    beforeEnter: nonAuthGuard,
     component: TripPage,
   },
   {
