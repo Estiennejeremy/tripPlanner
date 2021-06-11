@@ -56,7 +56,11 @@ export default {
   },
   methods: {
     openModal() {
-      this.openTripModal = true;
+      if (Cookies.get("token")) {
+        this.openTripModal = true;
+      } else {
+        this.$router.push("/connection");
+      }
     },
     closeModal() {
       this.openTripModal = false;

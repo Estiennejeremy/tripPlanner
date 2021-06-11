@@ -32,8 +32,12 @@
         </vs-row>
       </vs-col>
     </vs-row>
-    <vs-popup title="Add this activity to a trip" :active.sync="openTripModal" style="z-index: 10">
-      <AddToTripModal :close="closeModal"/>
+    <vs-popup
+      title="Add this activity to a trip"
+      :active.sync="openTripModal"
+      style="z-index: 10"
+    >
+      <AddToTripModal :close="closeModal" />
     </vs-popup>
   </div>
 </template>
@@ -41,6 +45,7 @@
 <script>
 import "material-icons/iconfont/material-icons.css";
 import AddToTripModal from "./AddToTripModal.vue";
+import Cookies from 'js-cookie';
 
 export default {
   name: "ActivitySearchCard",
@@ -62,7 +67,11 @@ export default {
   },
   methods: {
     openModal() {
-      this.openTripModal = true;
+      if (Cookies.get("token")) {
+        this.openTripModal = true;
+      } else {
+        this.$router.push("/connection");
+      }
     },
     closeModal() {
       this.openTripModal = false;
