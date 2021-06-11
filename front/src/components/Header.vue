@@ -66,7 +66,7 @@ export default {
     },
     logout() {
       Cookies.remove("token");
-      this.goToHomepage();
+      this.$router.push("/connection")
     },
     goToHomepage() {
       this.$router.push("/");

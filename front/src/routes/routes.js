@@ -10,7 +10,7 @@ function authGuard(to, from, next) {
   if (!Cookies.get('token')) {
     next();
   } else {
-    next('/home');
+    next('/');
   }
 }
 
@@ -32,6 +32,7 @@ const routes = [
   {
     path: '/',
     name: 'Home',
+    beforeEnter: nonAuthGuard,
     component: Home,
   },
   {
@@ -49,15 +50,18 @@ const routes = [
   {
     path: '/search/activity',
     name: 'SearchActivity',
+    beforeEnter: nonAuthGuard,
     component: SearchPage,
   },
   {
     path: '/search/transport',
     name: 'SearchTransport',
+    beforeEnter: nonAuthGuard,
     component: SearchPage,
   },
   {
     path: '/search',
+    beforeEnter: nonAuthGuard,
     redirect: '/search/activity',
   },
   // {
