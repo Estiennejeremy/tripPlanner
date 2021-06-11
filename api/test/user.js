@@ -23,13 +23,6 @@ var getUser = (id, callback) => {
         .end(callback)
 }
 
-var createUser = (data, callback) => {
-    chai.request(url)
-            .post("register")
-            .send(data)
-            .end(callback);
-}
-
 var getUser = (id, callback) => {
     chai.request(url)
         .get("/" + id)

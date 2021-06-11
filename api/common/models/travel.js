@@ -4,13 +4,18 @@ module.exports = function (Travel) {
   Travel.createTravel = async function (data) {
     var app = Travel.app;
     try {
-      if (!data.name || !data.from || !data.to || !data.dates || !data.userId)
+      if (!data.name || !data.from || !data.to || !data.dates || !data.userId) {
         return { error: 'Missing credentials' };
+      }
+      
+
       const existingTravel = await Travel.findOne({
         where: { name: data.name, userId: data.userId },
       });
+
       if (existingTravel)
         return { error: "Can't create a trip with an existing name" };
+
       const fromLocation = await app.models.Location.findOrCreate(
         { where: { name: data.from.name } },
         {
@@ -19,6 +24,7 @@ module.exports = function (Travel) {
           lat: data.from.lat,
         },
       );
+
       const toLocation = await app.models.Location.findOrCreate(
         { where: { name: data.to.name } },
         {
@@ -27,7 +33,8 @@ module.exports = function (Travel) {
           lat: data.to.lat,
         },
       );
-      await Travel.create({
+
+      const travel = await Travel.create({
         name: data.name,
         departDate: data.dates.end,
         arrivalDate: data.dates.start,
@@ -36,7 +43,8 @@ module.exports = function (Travel) {
         toId: toLocation[0].id,
       });
 
-      return { success: 'Successfuly updated' };
+      return { success: 'Successfuly updated', travel: travel };
+
     } catch (e) {
       return { error: 'An error occured' };
     }
