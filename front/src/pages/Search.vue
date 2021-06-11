@@ -186,13 +186,20 @@
             </vs-row>
           </div>
           <div id="clickable">
-            <activity-search-card
-              v-if="isActivity"
-              title="Test Activity"
-              imgSrc="https://img-19.ccm2.net/8vUCl8TXZfwTt7zAOkBkuDRHiT8=/1240x/smart/b829396acc244fd484c5ddcdcb2b08f3/ccmcms-commentcamarche/20494859.jpg"
-              @click.native="addMarkerToMap(30, 30)"
-            />
-            <transport-search-card v-else />
+            <div v-if="isActivity">
+              <activity-search-card
+                v-for="(option, index) in citiesCoord"
+                :key="index"
+                :title="option.name"
+                imgSrc="https://img-19.ccm2.net/8vUCl8TXZfwTt7zAOkBkuDRHiT8=/1240x/smart/b829396acc244fd484c5ddcdcb2b08f3/ccmcms-commentcamarche/20494859.jpg"
+                @click.native="
+                  reCenterMap(option.lat, option.long)
+                "
+              />
+            </div>
+            <div v-else>
+              <transport-search-card />
+            </div>
           </div>
         </vs-card>
       </vs-col>
@@ -200,11 +207,11 @@
         <MglMap
           :access-token="accessToken"
           :map-style="mapStyle"
+          :center="center"
+          :zoom="zoom"
           class="trip-map"
           @load="onMapLoad"
-        >
-            <MglMarker :coordinates="marker" color="blue" v-if="marker.length > 1"/>
-        </MglMap>
+        />
       </vs-col>
     </vs-row>
   </div>
@@ -217,7 +224,7 @@ import Mapbox from "mapbox-gl";
 
 export default {
   name: "Search",
-  components: { ActivitySearchCard, TransportSearchCard, MglMap, MglMarker },
+  components: { ActivitySearchCard, TransportSearchCard, MglMap },
   props: {
     city: {
       type: Object,
@@ -242,7 +249,36 @@ export default {
       selectedDate: "",
       priceText: "",
       rangeText: "",
-      marker: []
+      citiesCoord: [
+        {
+          name: "Toulouse",
+          lat: 43.6043,
+          long: 1.4437,
+        },
+        {
+          name: "Paris",
+          lat: 48.8534,
+          long: 2.3488,
+        },
+        {
+          name: "Bordeaux",
+          lat: 44.8333,
+          long: -0.5667,
+        },
+        {
+          name: "Montpellier",
+          lat: 43.6,
+          long: 3.8833,
+        },
+        {
+          name: "Rennes",
+          lat: 48.1147,
+          long: -1.6794,
+          
+        },
+      ],
+      center: [this.city.lon, this.city.lat],
+      zoom: 0,
     };
   },
   methods: {
@@ -285,13 +321,29 @@ export default {
         },
         essential: true,
       });
+      for (let i = 0; i < this.citiesCoord.length; i += 1) {
+        new Mapbox.Marker({ color: "#118AB2" })
+          .setLngLat([this.citiesCoord[i].long, this.citiesCoord[i].lat])
+          .addTo(map);
+      }
     },
-    onMapLoaded(event) {
-      this.map = event.map;
+    onMapMove({ map }) {
+      console.log("helre");
+      map.flyTo({
+        center: [this.city.lon, this.city.lat],
+        zoom: 10,
+        bearing: 2,
+        speed: 3,
+        easing(t) {
+          return t;
+        },
+        essential: true,
+      });
     },
-    addMarkerToMap(lat, lon) {
-      this.marker= [lon, lat]      
-    }
+    reCenterMap(lat, lon) {
+      this.center = [lon, lat];
+      this.zoom = 16;
+    },
   },
   computed: {
     getDate() {
@@ -303,9 +355,6 @@ export default {
     isTransport() {
       return this.$route.name == "SearchTransport";
     },
-    isMarker() {
-      return !!this.marker;
-    }
   },
   mounted() {
     this.setRange();
