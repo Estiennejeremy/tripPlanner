@@ -33,7 +33,12 @@ p, span, input {
   max-height: 100vh;
   max-width: 100vw;
 }
-
+.vs-popup--content {
+  padding: 0 !important;
+}
+.vs-select--label {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+}
 ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
   font-family: Avenir, Helvetica, Arial, sans-serif;
 }
