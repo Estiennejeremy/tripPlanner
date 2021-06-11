@@ -154,6 +154,9 @@ export default {
   margin-top: 8px;
   font-family: Avenir;
 }
+.button {
+  width: 150px;
+}
 </style>
 
 <style>

@@ -10,22 +10,22 @@
         />
       </vs-col>
       <vs-col vs-lg="6" vs-sm="6" vs-xs="12">
-        <vs-card class="title-card">
+        <div class="title-card">
           <div>
             <h1>{{trip.title}}</h1>
             <span>Dates : {{ trip.infos.startDate }} to {{ trip.infos.endDate }}</span>
             <br>
             <span>From {{ trip.infos.startLocation.name }} to {{ trip.infos.endLocation.name }}</span>
           </div>
-            <vs-select v-model="selectedData" multiple label="Display">
-              <vs-select-item
-                v-for="(item, index) in selectData"
-                :key="index"
-                :value="item.value"
-                :text="item.text"
-              />
-            </vs-select>
-        </vs-card>
+          <vs-select v-model="selectedData" multiple label="Display">
+            <vs-select-item
+              v-for="(item, index) in selectData"
+              :key="index"
+              :value="item.value"
+              :text="item.text"
+            />
+          </vs-select>
+        </div>
         <TripSection v-for="(section, index) in sectionsArray" :key="index" :name="section"/>
       </vs-col>
     </vs-row>
@@ -116,10 +116,16 @@ export default {
   height: 93vh;
 }
 .title-card {
+  display: flex;
+  justify-content: space-between;
   padding: 0 20px;
   margin-bottom: 0;
+  padding: 20px 40px;
+  background-color: white;
+  border-radius: 0 0 10px 10px;
+  box-shadow: 0 5px 5px rgba(212, 212, 212, .4);
 }
-.vs-card--content {
+.card-content {
   display:flex;
   justify-content: space-between;
   align-items: center;
