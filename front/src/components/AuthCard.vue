@@ -173,7 +173,8 @@ export default {
   },
 };
 </script>
-<style>
+
+<style scoped>
 .input-row {
   margin-bottom: 15px;
 }

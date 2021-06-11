@@ -2,7 +2,6 @@
   <div>
     <vs-row class="row">
       <vs-col
-        type="flex"
         vs-justify="center"
         vs-align="center"
         vs-w="4"
@@ -11,7 +10,7 @@
       >
         <vs-card class="search-bar" style="display: block">
           <div slot="header">
-            <vs-row vs-type="flex" vs-justify="space-evenly" vs-w="12">
+            <vs-row vs-type="flex" vs-justify="center" vs-w="12" class="checkboxes">
               <vs-col v-if="isActivity" vs-justify="space-between" vs-w="9">
                 <vs-row id="font">
                   <vs-checkbox v-model="activities" id="font"
@@ -53,6 +52,132 @@
                 </vs-switch>
               </vs-col>
             </vs-row>
+            <vs-row vs-type="flex" vs-justify="space-around" vs-w="12" v-if="isActivity">
+              <vs-col 
+                vs-type="flex"
+                vs-lg="3"
+                vs-sm="3"
+                vs-xs="12"
+              >
+                <vs-select placeholder="Range" v-model="rangeText" label="Range">
+                  <div class="slider">
+                    <vs-slider
+                      v-model="range"
+                      text-fixed="km"
+                      v-on:change="setRange"
+                    />
+                  </div>
+                </vs-select>
+              </vs-col>
+              <vs-col
+                vs-type="flex"
+                vs-lg="3"
+                vs-sm="3"
+                vs-xs="12"
+              >
+                <vs-select placeholder="Price" v-model="priceText" label="Price">
+                  <div class="slider">
+                    <vs-slider
+                      v-model="price"
+                      text-fixed="€"
+                      v-on:change="setPrice"
+                    />
+                  </div>
+                </vs-select>
+              </vs-col>
+              <vs-col
+                vs-type="flex"
+                vs-lg="3"
+                vs-sm="3"
+                vs-xs="12"
+              >
+                <vs-input
+                  type="date"
+                  :min="getDate"
+                  :value="getDate"
+                  v-model="selectedDate"
+                  label="Date"
+                />
+              </vs-col>
+            </vs-row>
+            <vs-row vs-type="flex" vs-justify="space-around" vs-w="12" v-if="isTransport">
+              <vs-col
+                vs-type="flex"
+                vs-lg="5"
+                vs-sm="5"
+                vs-xs="12"
+                vs-justify="center"
+              >
+              <div class="vs-component vs-con-input-label vs-input vs-input-primary">
+                <label class="vs-input--label">From</label>
+                <mapbox-geocoder
+                  access-token="pk.eyJ1IjoidGlmYWluZWsiLCJhIjoiY2tvbzl5ODZqMDlqOTJ5bnVxb3Z0dWNtNyJ9.EsQKq2Ll_f7hmDaY_DCflA"
+                  @mb-created="(instance) => (control = instance)"
+                  types="place"
+                  :limit="2"
+                  @mb-result="
+                    (res) => {
+                      getFromLocation(res);
+                    }
+                  "
+                  class="places-input"
+                />
+              </div>
+              </vs-col>
+              <vs-col
+                vs-type="flex"
+                vs-lg="5"
+                vs-sm="5"
+                vs-xs="12"
+              >
+                <vs-select placeholder="Price" v-model="priceText" label="Price">
+                  <div class="slider">
+                    <vs-slider
+                      v-model="price"
+                      text-fixed="€"
+                      v-on:change="setPrice"
+                    />
+                  </div>
+                </vs-select>
+              </vs-col>
+              <vs-col
+                vs-type="flex"
+                vs-lg="5"
+                vs-sm="5"
+                vs-xs="12"
+                vs-justify="center"
+              >
+              <div class="vs-component vs-con-input-label vs-input vs-input-primary">
+                <label class="vs-input--label">To</label>
+                <mapbox-geocoder
+                  access-token="pk.eyJ1IjoidGlmYWluZWsiLCJhIjoiY2tvbzl5ODZqMDlqOTJ5bnVxb3Z0dWNtNyJ9.EsQKq2Ll_f7hmDaY_DCflA"
+                  @mb-created="(instance) => (control = instance)"
+                  types="place"
+                  :limit="2"
+                  @mb-result="
+                    (res) => {
+                      getToLocation(res);
+                    }
+                  "
+                  class="places-input"
+                />
+              </div>
+              </vs-col>
+              <vs-col
+                vs-type="flex"
+                vs-lg="5"
+                vs-sm="5"
+                vs-xs="12"
+              >
+                <vs-input
+                  type="date"
+                  :min="getDate"
+                  :value="getDate"
+                  v-model="selectedDate"
+                  label="Date"
+                />
+              </vs-col>
+            </vs-row>
           </div>
           <div>
             <activity-search-card
@@ -65,7 +190,12 @@
         </vs-card>
       </vs-col>
       <vs-col vs-w="8" vs-lg="8" vs-xs="3">
-        <div id="mapbox" class="map" />
+        <MglMap
+          :access-token="accessToken"
+          :map-style="mapStyle"
+          class="trip-map"
+          @load="onMapLoad"
+        />
       </vs-col>
     </vs-row>
   </div>
@@ -74,12 +204,16 @@
 const mapboxgl = require("mapbox-gl/dist/mapbox-gl.js");
 import ActivitySearchCard from "../components/ActivitySearchCard.vue";
 import TransportSearchCard from "../components/TransportSearchCard.vue";
+import { MglMap } from 'vue-mapbox';
+import Mapbox from 'mapbox-gl';
 
 export default {
   name: "Search",
-  components: { ActivitySearchCard, TransportSearchCard },
+  components: { ActivitySearchCard, TransportSearchCard, MglMap },
   data() {
     return {
+      accessToken: 'pk.eyJ1IjoidGlmYWluZWsiLCJhIjoiY2tvY3k4OW1pMG1nNjJvbjFwcnNzNWI4eiJ9.4GbB9581EIhx7AA43BpmTg',
+      mapStyle: 'mapbox://styles/tifainek/ckor6l9ku14w217q9l71uvj2y',
       restaurants: true,
       hotels: true,
       bars: true,
@@ -89,6 +223,11 @@ export default {
       car: true,
       boat: true,
       switchStatus: "",
+      range: "10",
+      price: [0, 100],
+      selectedDate: "",
+      priceText: "",
+      rangeText: "",
     };
   },
   methods: {
@@ -99,8 +238,49 @@ export default {
         this.$router.replace("/search/activity");
       }
     },
+    setRange() {
+      this.rangeText = "Within " + this.range + "km";
+    },
+    setPrice() {
+      this.priceText = `${this.price[0]} - ${this.price[1]}€`;
+    },
+    getFromLocation(res) {
+      this.from = {
+        lat: res.result.center[1],
+        lon: res.result.center[0],
+        name: res.result.text,
+      };
+    },
+    getToLocation(res) {
+      this.to = {
+        lat: res.result.center[1],
+        lon: res.result.center[0],
+        name: res.result.text,
+      };
+    },
+    onMapLoad({ map }) {
+      map.addControl(new Mapbox.NavigationControl());
+      map.flyTo({
+        center: [0, 0],
+        zoom: 2,
+        bearing: 2,
+        speed: 3,
+        easing(t) {
+          return t;
+        },
+        essential: true,
+      });
+      // for (let i = 0; i < this.citiesCoord.length; i += 1) {
+      //   new Mapbox.Marker({ color: '#118AB2' })
+      //     .setLngLat([this.citiesCoord[i].long, this.citiesCoord[i].lat])
+      //     .addTo(map);
+      // }
+    },
   },
   computed: {
+    getDate() {
+      return new Date().toISOString().split("T")[0];
+    },
     isActivity() {
       return this.$route.name == "SearchActivity";
     },
@@ -109,14 +289,10 @@ export default {
     },
   },
   mounted() {
+    this.mapbox = Mapbox;
     mapboxgl.accessToken =
       "pk.eyJ1IjoidHJpcHBsYW5uZXIxMCIsImEiOiJja295M2dmajMwYjVqMnhxbms3MDJiZ2d5In0.LmgJtpjSjypFMvpvGj2UTA";
-    const map = new mapboxgl.Map({
-      container: "mapbox",
-      style: "mapbox://styles/mapbox/streets-v11",
-      center: [-74.5, 40],
-      zoom: 9,
-    });
+    this.setRange();
     if (this.$route.name == "SearchActivity") this.switchStatus = true;
     else this.switchStatus = false;
   },
@@ -126,6 +302,14 @@ export default {
 .map {
   visibility: visible;
   height: 100%;
+}
+
+.slider {
+  padding: 25px 15px 0 15px !important;
+}
+
+.checkboxes {
+  padding: 20px 0;
 }
 
 .search-bar {
@@ -170,4 +354,11 @@ export default {
 .vs-switch--text.text-off {
   color: white !important;
 }
+
+/* .label {
+  color: white;
+  font-size: 15px;
+  align-self: center;
+  padding-right: 10px
+} */
 </style>
