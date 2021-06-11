@@ -40,11 +40,13 @@ const routes = [
     path: '/search/activity',
     name: 'SearchActivity',
     component: SearchPage,
+    props: true
   },
   {
     path: '/search/transport',
     name: 'SearchTransport',
     component: SearchPage,
+    props: true
   },
   {
     path: '/search',

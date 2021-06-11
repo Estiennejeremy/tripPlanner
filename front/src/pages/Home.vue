@@ -197,13 +197,13 @@ export default {
     searchActivity() {
       this.$router.push({
         name: "SearchActivity",
-        params: { types: "activity" },
+        params: { city: this.place },
       });
     },
     searchTransport() {
       this.$router.push({
         name: "SearchTransport",
-        params: { types: "transport" },
+        params: { cityFrom: this.from, cityTo: this.to },
       });
     },
     getFromLocation(res) {

@@ -10,7 +10,12 @@
       >
         <vs-card class="search-bar" style="display: block">
           <div slot="header">
-            <vs-row vs-type="flex" vs-justify="center" vs-w="12" class="checkboxes">
+            <vs-row
+              vs-type="flex"
+              vs-justify="center"
+              vs-w="12"
+              class="checkboxes"
+            >
               <vs-col v-if="isActivity" vs-justify="space-between" vs-w="9">
                 <vs-row id="font">
                   <vs-checkbox v-model="activities" id="font"
@@ -52,14 +57,18 @@
                 </vs-switch>
               </vs-col>
             </vs-row>
-            <vs-row vs-type="flex" vs-justify="space-around" vs-w="12" v-if="isActivity">
-              <vs-col 
-                vs-type="flex"
-                vs-lg="3"
-                vs-sm="3"
-                vs-xs="12"
-              >
-                <vs-select placeholder="Range" v-model="rangeText" label="Range">
+            <vs-row
+              vs-type="flex"
+              vs-justify="space-around"
+              vs-w="12"
+              v-if="isActivity"
+            >
+              <vs-col vs-type="flex" vs-lg="3" vs-sm="3" vs-xs="12">
+                <vs-select
+                  placeholder="Range"
+                  v-model="rangeText"
+                  label="Range"
+                >
                   <div class="slider">
                     <vs-slider
                       v-model="range"
@@ -69,13 +78,12 @@
                   </div>
                 </vs-select>
               </vs-col>
-              <vs-col
-                vs-type="flex"
-                vs-lg="3"
-                vs-sm="3"
-                vs-xs="12"
-              >
-                <vs-select placeholder="Price" v-model="priceText" label="Price">
+              <vs-col vs-type="flex" vs-lg="3" vs-sm="3" vs-xs="12">
+                <vs-select
+                  placeholder="Price"
+                  v-model="priceText"
+                  label="Price"
+                >
                   <div class="slider">
                     <vs-slider
                       v-model="price"
@@ -85,12 +93,7 @@
                   </div>
                 </vs-select>
               </vs-col>
-              <vs-col
-                vs-type="flex"
-                vs-lg="3"
-                vs-sm="3"
-                vs-xs="12"
-              >
+              <vs-col vs-type="flex" vs-lg="3" vs-sm="3" vs-xs="12">
                 <vs-input
                   type="date"
                   :min="getDate"
@@ -100,7 +103,12 @@
                 />
               </vs-col>
             </vs-row>
-            <vs-row vs-type="flex" vs-justify="space-around" vs-w="12" v-if="isTransport">
+            <vs-row
+              vs-type="flex"
+              vs-justify="space-around"
+              vs-w="12"
+              v-if="isTransport"
+            >
               <vs-col
                 vs-type="flex"
                 vs-lg="5"
@@ -108,29 +116,30 @@
                 vs-xs="12"
                 vs-justify="center"
               >
-              <div class="vs-component vs-con-input-label vs-input vs-input-primary">
-                <label class="vs-input--label">From</label>
-                <mapbox-geocoder
-                  access-token="pk.eyJ1IjoidGlmYWluZWsiLCJhIjoiY2tvbzl5ODZqMDlqOTJ5bnVxb3Z0dWNtNyJ9.EsQKq2Ll_f7hmDaY_DCflA"
-                  @mb-created="(instance) => (control = instance)"
-                  types="place"
-                  :limit="2"
-                  @mb-result="
-                    (res) => {
-                      getFromLocation(res);
-                    }
-                  "
-                  class="places-input"
-                />
-              </div>
+                <div
+                  class="vs-component vs-con-input-label vs-input vs-input-primary"
+                >
+                  <label class="vs-input--label">From</label>
+                  <mapbox-geocoder
+                    access-token="pk.eyJ1IjoidGlmYWluZWsiLCJhIjoiY2tvbzl5ODZqMDlqOTJ5bnVxb3Z0dWNtNyJ9.EsQKq2Ll_f7hmDaY_DCflA"
+                    @mb-created="(instance) => (control = instance)"
+                    types="place"
+                    :limit="2"
+                    @mb-result="
+                      (res) => {
+                        getFromLocation(res);
+                      }
+                    "
+                    class="places-input"
+                  />
+                </div>
               </vs-col>
-              <vs-col
-                vs-type="flex"
-                vs-lg="5"
-                vs-sm="5"
-                vs-xs="12"
-              >
-                <vs-select placeholder="Price" v-model="priceText" label="Price">
+              <vs-col vs-type="flex" vs-lg="5" vs-sm="5" vs-xs="12">
+                <vs-select
+                  placeholder="Price"
+                  v-model="priceText"
+                  label="Price"
+                >
                   <div class="slider">
                     <vs-slider
                       v-model="price"
@@ -147,28 +156,25 @@
                 vs-xs="12"
                 vs-justify="center"
               >
-              <div class="vs-component vs-con-input-label vs-input vs-input-primary">
-                <label class="vs-input--label">To</label>
-                <mapbox-geocoder
-                  access-token="pk.eyJ1IjoidGlmYWluZWsiLCJhIjoiY2tvbzl5ODZqMDlqOTJ5bnVxb3Z0dWNtNyJ9.EsQKq2Ll_f7hmDaY_DCflA"
-                  @mb-created="(instance) => (control = instance)"
-                  types="place"
-                  :limit="2"
-                  @mb-result="
-                    (res) => {
-                      getToLocation(res);
-                    }
-                  "
-                  class="places-input"
-                />
-              </div>
+                <div
+                  class="vs-component vs-con-input-label vs-input vs-input-primary"
+                >
+                  <label class="vs-input--label">To</label>
+                  <mapbox-geocoder
+                    access-token="pk.eyJ1IjoidGlmYWluZWsiLCJhIjoiY2tvbzl5ODZqMDlqOTJ5bnVxb3Z0dWNtNyJ9.EsQKq2Ll_f7hmDaY_DCflA"
+                    @mb-created="(instance) => (control = instance)"
+                    types="place"
+                    :limit="2"
+                    @mb-result="
+                      (res) => {
+                        getToLocation(res);
+                      }
+                    "
+                    class="places-input"
+                  />
+                </div>
               </vs-col>
-              <vs-col
-                vs-type="flex"
-                vs-lg="5"
-                vs-sm="5"
-                vs-xs="12"
-              >
+              <vs-col vs-type="flex" vs-lg="5" vs-sm="5" vs-xs="12">
                 <vs-input
                   type="date"
                   :min="getDate"
@@ -179,11 +185,12 @@
               </vs-col>
             </vs-row>
           </div>
-          <div>
+          <div id="clickable">
             <activity-search-card
               v-if="isActivity"
               title="Test Activity"
               imgSrc="https://img-19.ccm2.net/8vUCl8TXZfwTt7zAOkBkuDRHiT8=/1240x/smart/b829396acc244fd484c5ddcdcb2b08f3/ccmcms-commentcamarche/20494859.jpg"
+              @click.native="addMarkerToMap(30, 30)"
             />
             <transport-search-card v-else />
           </div>
@@ -195,25 +202,32 @@
           :map-style="mapStyle"
           class="trip-map"
           @load="onMapLoad"
-        />
+        >
+            <MglMarker :coordinates="marker" color="blue" v-if="marker.length > 1"/>
+        </MglMap>
       </vs-col>
     </vs-row>
   </div>
 </template>
 <script>
-const mapboxgl = require("mapbox-gl/dist/mapbox-gl.js");
 import ActivitySearchCard from "../components/ActivitySearchCard.vue";
 import TransportSearchCard from "../components/TransportSearchCard.vue";
-import { MglMap } from 'vue-mapbox';
-import Mapbox from 'mapbox-gl';
+import { MglMap, MglMarker } from "vue-mapbox";
+import Mapbox from "mapbox-gl";
 
 export default {
   name: "Search",
-  components: { ActivitySearchCard, TransportSearchCard, MglMap },
+  components: { ActivitySearchCard, TransportSearchCard, MglMap, MglMarker },
+  props: {
+    city: {
+      type: Object,
+    },
+  },
   data() {
     return {
-      accessToken: 'pk.eyJ1IjoidGlmYWluZWsiLCJhIjoiY2tvY3k4OW1pMG1nNjJvbjFwcnNzNWI4eiJ9.4GbB9581EIhx7AA43BpmTg',
-      mapStyle: 'mapbox://styles/tifainek/ckor6l9ku14w217q9l71uvj2y',
+      accessToken:
+        "pk.eyJ1IjoidGlmYWluZWsiLCJhIjoiY2tvY3k4OW1pMG1nNjJvbjFwcnNzNWI4eiJ9.4GbB9581EIhx7AA43BpmTg",
+      mapStyle: "mapbox://styles/tifainek/ckor6l9ku14w217q9l71uvj2y",
       restaurants: true,
       hotels: true,
       bars: true,
@@ -228,6 +242,7 @@ export default {
       selectedDate: "",
       priceText: "",
       rangeText: "",
+      marker: []
     };
   },
   methods: {
@@ -261,8 +276,8 @@ export default {
     onMapLoad({ map }) {
       map.addControl(new Mapbox.NavigationControl());
       map.flyTo({
-        center: [0, 0],
-        zoom: 2,
+        center: [this.city.lon, this.city.lat],
+        zoom: 10,
         bearing: 2,
         speed: 3,
         easing(t) {
@@ -270,12 +285,13 @@ export default {
         },
         essential: true,
       });
-      // for (let i = 0; i < this.citiesCoord.length; i += 1) {
-      //   new Mapbox.Marker({ color: '#118AB2' })
-      //     .setLngLat([this.citiesCoord[i].long, this.citiesCoord[i].lat])
-      //     .addTo(map);
-      // }
     },
+    onMapLoaded(event) {
+      this.map = event.map;
+    },
+    addMarkerToMap(lat, lon) {
+      this.marker= [lon, lat]      
+    }
   },
   computed: {
     getDate() {
@@ -287,11 +303,11 @@ export default {
     isTransport() {
       return this.$route.name == "SearchTransport";
     },
+    isMarker() {
+      return !!this.marker;
+    }
   },
   mounted() {
-    this.mapbox = Mapbox;
-    mapboxgl.accessToken =
-      "pk.eyJ1IjoidHJpcHBsYW5uZXIxMCIsImEiOiJja295M2dmajMwYjVqMnhxbms3MDJiZ2d5In0.LmgJtpjSjypFMvpvGj2UTA";
     this.setRange();
     if (this.$route.name == "SearchActivity") this.switchStatus = true;
     else this.switchStatus = false;
@@ -353,6 +369,10 @@ export default {
 
 .vs-switch--text.text-off {
   color: white !important;
+}
+
+#clickable {
+  cursor: pointer;
 }
 
 /* .label {
