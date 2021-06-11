@@ -55,8 +55,8 @@
             <vs-row vs-type="flex" vs-justify="space-around" vs-w="12" v-if="isActivity">
               <vs-col 
                 vs-type="flex"
-                vs-lg="3"
-                vs-sm="3"
+                vs-lg="5"
+                vs-sm="5"
                 vs-xs="12"
               >
                 <vs-select placeholder="Range" v-model="rangeText" label="Range">
@@ -71,8 +71,8 @@
               </vs-col>
               <vs-col
                 vs-type="flex"
-                vs-lg="3"
-                vs-sm="3"
+                vs-lg="5"
+                vs-sm="5"
                 vs-xs="12"
               >
                 <vs-select placeholder="Price" v-model="priceText" label="Price">
@@ -87,8 +87,8 @@
               </vs-col>
               <vs-col
                 vs-type="flex"
-                vs-lg="3"
-                vs-sm="3"
+                vs-lg="5"
+                vs-sm="5"
                 vs-xs="12"
               >
                 <vs-input
@@ -99,6 +99,28 @@
                   label="Date"
                 />
               </vs-col>
+              <vs-col
+                vs-type="flex"
+                vs-lg="5"
+                vs-sm="5"
+                vs-xs="12"
+              >
+                <div class="vs-component vs-con-input-label vs-input vs-input-primary">
+                  <label class="vs-input--label">City</label>
+                  <mapbox-geocoder
+                    access-token="pk.eyJ1IjoidGlmYWluZWsiLCJhIjoiY2tvbzl5ODZqMDlqOTJ5bnVxb3Z0dWNtNyJ9.EsQKq2Ll_f7hmDaY_DCflA"
+                    @mb-created="(instance) => (control = instance)"
+                    types="place"
+                    :limit="2"
+                    @mb-result="
+                      (res) => {
+                        getToLocation(res);
+                      }
+                    "
+                    class="places-input"
+                  />
+                </div>
+              </vs-col>
             </vs-row>
             <vs-row vs-type="flex" vs-justify="space-around" vs-w="12" v-if="isTransport">
               <vs-col
@@ -108,21 +130,13 @@
                 vs-xs="12"
                 vs-justify="center"
               >
-              <div class="vs-component vs-con-input-label vs-input vs-input-primary">
-                <label class="vs-input--label">From</label>
-                <mapbox-geocoder
-                  access-token="pk.eyJ1IjoidGlmYWluZWsiLCJhIjoiY2tvbzl5ODZqMDlqOTJ5bnVxb3Z0dWNtNyJ9.EsQKq2Ll_f7hmDaY_DCflA"
-                  @mb-created="(instance) => (control = instance)"
-                  types="place"
-                  :limit="2"
-                  @mb-result="
-                    (res) => {
-                      getFromLocation(res);
-                    }
-                  "
-                  class="places-input"
+                <vs-input
+                  type="date"
+                  :min="getDate"
+                  :value="getDate"
+                  v-model="selectedDate"
+                  label="Date"
                 />
-              </div>
               </vs-col>
               <vs-col
                 vs-type="flex"
@@ -153,7 +167,7 @@
                   access-token="pk.eyJ1IjoidGlmYWluZWsiLCJhIjoiY2tvbzl5ODZqMDlqOTJ5bnVxb3Z0dWNtNyJ9.EsQKq2Ll_f7hmDaY_DCflA"
                   @mb-created="(instance) => (control = instance)"
                   types="place"
-                  :limit="2"
+                  :limit="4"
                   @mb-result="
                     (res) => {
                       getToLocation(res);
@@ -169,33 +183,45 @@
                 vs-sm="5"
                 vs-xs="12"
               >
-                <vs-input
-                  type="date"
-                  :min="getDate"
-                  :value="getDate"
-                  v-model="selectedDate"
-                  label="Date"
-                />
+                <div class="vs-component vs-con-input-label vs-input vs-input-primary">
+                  <label class="vs-input--label">From</label>
+                  <mapbox-geocoder
+                    access-token="pk.eyJ1IjoidGlmYWluZWsiLCJhIjoiY2tvbzl5ODZqMDlqOTJ5bnVxb3Z0dWNtNyJ9.EsQKq2Ll_f7hmDaY_DCflA"
+                    @mb-created="(instance) => (control = instance)"
+                    types="place"
+                    :limit="4"
+                    @mb-result="
+                      (res) => {
+                        getFromLocation(res);
+                      }
+                    "
+                    class="places-input"
+                  />
+                </div>
               </vs-col>
             </vs-row>
           </div>
-          <div>
+          <div v-if="isActivity"> 
             <activity-search-card
-              v-if="isActivity"
-              title="Test Activity"
+              v-for="(activity, index) in activitiesArray"
+              :key="index"
+              @click.native="selectPin(activity.long, activity.lat)"
+              :title="activity.title"
               imgSrc="https://img-19.ccm2.net/8vUCl8TXZfwTt7zAOkBkuDRHiT8=/1240x/smart/b829396acc244fd484c5ddcdcb2b08f3/ccmcms-commentcamarche/20494859.jpg"
             />
-            <transport-search-card v-else />
+          </div>
+          <div v-else>
+            <transport-search-card 
+              v-for="(transport, index) in transportsArray"
+              :key="index"
+              @click.native="selectPin(transport.long, transport.lat)"
+              :title="transport.title"
+            />
           </div>
         </vs-card>
       </vs-col>
       <vs-col vs-w="8" vs-lg="8" vs-xs="3">
-        <MglMap
-          :access-token="accessToken"
-          :map-style="mapStyle"
-          class="trip-map"
-          @load="onMapLoad"
-        />
+        <div id="map" style="width: 100%; height: 100%"></div>
       </vs-col>
     </vs-row>
   </div>
@@ -204,14 +230,14 @@
 const mapboxgl = require("mapbox-gl/dist/mapbox-gl.js");
 import ActivitySearchCard from "../components/ActivitySearchCard.vue";
 import TransportSearchCard from "../components/TransportSearchCard.vue";
-import { MglMap } from 'vue-mapbox';
 import Mapbox from 'mapbox-gl';
 
 export default {
   name: "Search",
-  components: { ActivitySearchCard, TransportSearchCard, MglMap },
+  components: { ActivitySearchCard, TransportSearchCard },
   data() {
     return {
+      map: {},
       accessToken: 'pk.eyJ1IjoidGlmYWluZWsiLCJhIjoiY2tvY3k4OW1pMG1nNjJvbjFwcnNzNWI4eiJ9.4GbB9581EIhx7AA43BpmTg',
       mapStyle: 'mapbox://styles/tifainek/ckor6l9ku14w217q9l71uvj2y',
       restaurants: true,
@@ -228,15 +254,48 @@ export default {
       selectedDate: "",
       priceText: "",
       rangeText: "",
+      activitiesArray: [
+        {
+          title: "Activité 1",
+          lat: 43.6333,
+          long: 1.4,
+        },
+        {
+          title: "Activité 2",
+          lat: 43.6043,
+          long: 1.4437,
+        }
+      ],
+      transportsArray: [
+        {
+          type: "Plane",
+          lat: 48.8534,
+          long: 2.3488,
+        },
+        {
+          type: "Car",
+          lat: 48.8534,
+          long: 2,
+        }
+      ],
+      selectedCoord: {
+        lat: 0,
+        long: 0,
+      },
+      markers: [],
     };
   },
   methods: {
     switchType() {
+      this.selectedCoord = {lat: 0, long: 0};
+      this.removeMarkers();
       if (this.$route.name == "SearchActivity") {
         this.$router.replace("/search/transport");
       } else {
         this.$router.replace("/search/activity");
       }
+      this.map.flyTo({center: [this.coordArray[0].long, this.coordArray[0].lat], zoom: 10, speed: 1,})
+      this.addMarkers();
     },
     setRange() {
       this.rangeText = "Within " + this.range + "km";
@@ -258,24 +317,33 @@ export default {
         name: res.result.text,
       };
     },
-    onMapLoad({ map }) {
-      map.addControl(new Mapbox.NavigationControl());
-      map.flyTo({
-        center: [0, 0],
-        zoom: 2,
-        bearing: 2,
-        speed: 3,
-        easing(t) {
-          return t;
-        },
-        essential: true,
-      });
-      // for (let i = 0; i < this.citiesCoord.length; i += 1) {
-      //   new Mapbox.Marker({ color: '#118AB2' })
-      //     .setLngLat([this.citiesCoord[i].long, this.citiesCoord[i].lat])
-      //     .addTo(map);
-      // }
+    selectPin(long, lat) {
+      if (this.selectedCoord.long !== 0 && this.selectedCoord.lat !== 0) {
+        const marker = new mapboxgl.Marker({ color: '#118AB2' })
+          .setLngLat([this.selectedCoord.long, this.selectedCoord.lat])
+          .addTo(this.map);
+        this.markers.push(marker)
+      }
+      this.selectedCoord.long = long;
+      this.selectedCoord.lat = lat;
+      const marker2 = new mapboxgl.Marker({ color: '#fc2171' })
+        .setLngLat([this.selectedCoord.long, this.selectedCoord.lat])
+        .addTo(this.map);
+      this.markers.push(marker2)
+      this.map.flyTo({center: [long, lat], zoom: 10, speed: 0.5,})
     },
+    addMarkers() {
+      for (let i = 0; i < this.coordArray.length; i += 1) {
+      let marker = new mapboxgl.Marker({ color: '#118AB2' })
+        .setLngLat([this.coordArray[i].long, this.coordArray[i].lat])
+        .addTo(this.map);
+      this.markers.push(marker);
+      };
+    },
+    removeMarkers() {
+      this.markers.forEach((marker) => marker.remove())
+      this.markers = []
+    }
   },
   computed: {
     getDate() {
@@ -287,20 +355,29 @@ export default {
     isTransport() {
       return this.$route.name == "SearchTransport";
     },
+    coordArray() {
+      if (this.isActivity) return this.activitiesArray;
+      else return this.transportsArray;
+    }
   },
   mounted() {
-    this.mapbox = Mapbox;
-    mapboxgl.accessToken =
-      "pk.eyJ1IjoidHJpcHBsYW5uZXIxMCIsImEiOiJja295M2dmajMwYjVqMnhxbms3MDJiZ2d5In0.LmgJtpjSjypFMvpvGj2UTA";
+    mapboxgl.accessToken = this.accessToken;
     this.setRange();
     if (this.$route.name == "SearchActivity") this.switchStatus = true;
     else this.switchStatus = false;
+    this.map = new mapboxgl.Map({
+      container: 'map', // container id
+      style: this.mapStyle, // style URL
+      center: [this.$route.query.lon || this.coordArray[0].long, this.$route.query.lat || this.coordArray[0].lat], // starting position [lng, lat]
+      zoom: 9 // starting zoom
+    });
+    this.addMarkers();
   },
 };
 </script>
 <style>
 .map {
-  visibility: visible;
+  width: 100%;
   height: 100%;
 }
 
@@ -354,11 +431,4 @@ export default {
 .vs-switch--text.text-off {
   color: white !important;
 }
-
-/* .label {
-  color: white;
-  font-size: 15px;
-  align-self: center;
-  padding-right: 10px
-} */
 </style>

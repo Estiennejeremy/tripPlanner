@@ -195,16 +195,10 @@ export default {
   },
   methods: {
     searchActivity() {
-      this.$router.push({
-        name: "SearchActivity",
-        params: { types: "activity" },
-      });
+      this.$router.push(`/search/activity?lat=${this.place.lat}&lon=${this.place.lon}`);
     },
     searchTransport() {
-      this.$router.push({
-        name: "SearchTransport",
-        params: { types: "transport" },
-      });
+      this.$router.push(`/search/transport?lat=${this.from.lat}&lon=${this.from.lon}`);
     },
     getFromLocation(res) {
       this.from = {
