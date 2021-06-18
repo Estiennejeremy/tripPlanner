@@ -7,4 +7,5 @@ function importTest(name, path) {
 describe('All tests', function() {
     importTest("user", './user.js');
     importTest("travel", './travel.js');
+    importTest("planning", './planning.js');
 });
