@@ -13,6 +13,13 @@
     </vs-row>
     <vs-row vs-justify="center">
       <vs-col
+        v-if="trips.length === 0"
+        vs-w="12"
+        vs-justify="center"
+      >
+      <h2 style="text-align:center">Oops ! Seems like you don't have any trips yet... Try adding one !</h2>
+      </vs-col>
+      <vs-col
         v-for="trip in trips"
         :key="trip.id"
         vs-lg="3"

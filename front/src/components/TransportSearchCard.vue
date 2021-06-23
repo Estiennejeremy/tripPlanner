@@ -13,7 +13,7 @@
         vs-align="center"
         class="row-content"
       >
-        Prix
+        <h3>Type de transport</h3>
       </vs-row>
       <vs-row
         vs-type="flex"
@@ -21,7 +21,7 @@
         vs-align="center"
         class="row-content"
       >
-        Type de transport
+        Prix
       </vs-row>
       <vs-row
         vs-type="flex"
@@ -56,7 +56,11 @@ export default {
   },
   methods: {
     openModal() {
-      this.openTripModal = true;
+      if (Cookies.get("token")) {
+        this.openTripModal = true;
+      } else {
+        this.$router.push("/connection");
+      }
     },
     closeModal() {
       this.openTripModal = false;
