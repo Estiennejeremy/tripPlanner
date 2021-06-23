@@ -70,11 +70,77 @@ module.exports = function(Activity) {
           console.error(err);
         }
       }),
+      (Activity.getAllActivity = async function (req, coord, start, stop, type ) {
+        try {
+         let allActi = [];
+          var app = Activity.app;
+          const res = await request({
+            method: 'GET',
+            uri: 'http://api.openeventdatabase.org/event' ,
+            qs: {
+              what: type,
+              near: coord,
+              start: start,
+              stop: stop
+            },
+            json: true,
+          });
+
+          for(var raw of res.features) {
+            let location = await app.models.Location.findOrCreate({
+                
+              where: { lon: raw.geometry.coordinates[0], lat: raw.geometry.coordinates[1] },
+            },
+          {
+            lon: raw.properties.lon, 
+            lat: raw.properties.lat,
+            name: raw.properties.location_name
+
+
+          });
+          console.log(raw.properties.conditions_fr)
+
+            if(location != null) {
+              
+              let activity = await Activity.findOrCreate({
+                where: {name: raw.properties.label}
+            },
+            {
+              name: raw.properties.label,
+              type: type,
+              address: raw.properties.location_address + " " + raw.properties.location_city,
+              locationId: location[0].id,
+              price: raw.properties.conditions_fr != null ? raw.properties.conditions_fr: 0
+            })
+            console.log(activity)
+
+            allActi.push(activity[0])
+          }
+          }
+
+          return allActi;
+
+        } catch (err) {
+          console.error(err);
+        }
+      }),
       Activity.remoteMethod('reverse', {
         accepts: [
           { arg: 'req', type: 'object', http: { source: 'req' } },
           { arg: 'lon', type: 'number', required: true },
           { arg: 'lat', type: 'number', required: true },
+          
+        ],
+        http: { verb: 'GET' },
+        returns: { type: 'object', root: true },
+      }),
+      Activity.remoteMethod('getAllActivity', {
+        accepts: [
+          { arg: 'req', type: 'object', http: { source: 'req' } },
+          { arg: 'coord', type: 'array', required: true }, 
+          { arg: 'start', type: 'string', required: true },
+          { arg: 'stop', type: 'string', required: true },
+          { arg: 'type', type: 'string', required: true },
           
         ],
         http: { verb: 'GET' },
