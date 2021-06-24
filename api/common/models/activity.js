@@ -113,7 +113,7 @@ module.exports = function(Activity) {
               address: raw.vicinity,
               locationId: location[0].id,
               location: location[0],
-              price: raw.price_level ? raw.price_level : "unknown"
+              price:  Math.floor(Math.random() * 20)
             })
             activity[0].lon = raw.geometry.location.lng, 
             activity[0].lat = raw.geometry.location.lat
@@ -168,7 +168,7 @@ module.exports = function(Activity) {
               type: type,
               address: caddr,
               locationId: location[0].id,
-              price: raw.properties.conditions_fr != null ? raw.properties.conditions_fr: 0
+              price:  Math.floor(Math.random() * 20)
             })
 
             allActi.push(activity[0])
@@ -197,7 +197,7 @@ module.exports = function(Activity) {
           { arg: 'coord', type: 'array', required: true }, 
           { arg: 'start', type: 'string', required: true },
           { arg: 'stop', type: 'string', required: true },
-          { arg: 'type', type: 'string', required: true },
+          { arg: 'type', type: 'string', required: false },
           
         ],
         http: { verb: 'GET' },
@@ -208,7 +208,7 @@ module.exports = function(Activity) {
           { arg: 'req', type: 'object', http: { source: 'req' } },
           { arg: 'coord', type: 'string', required: true }, 
           { arg: 'radius', type: 'number', required: true },
-          { arg: 'type', type: 'array', required: true },
+          { arg: 'type', type: 'array', required: false },
           
         ],
         http: { verb: 'GET' },
