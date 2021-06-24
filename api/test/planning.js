@@ -87,7 +87,7 @@ describe('[POST] /addActivityToTravel', function() {
                         name: "string",
                         type: "string",
                         address: "string",
-                        price: 0,
+                        price: "string",
                         locationId: res.body.id
                     }
 
@@ -97,7 +97,7 @@ describe('[POST] /addActivityToTravel', function() {
                             type: "string",
                             departDate: "2021-06-18T16:25:34.548Z",
                             arrivalDate: "2021-06-18T16:25:34.548Z",
-                            price: 0,
+                            price: "string",
                             fromId: 0,
                             toId: 0
                         }
