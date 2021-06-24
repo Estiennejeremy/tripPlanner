@@ -87,7 +87,7 @@ describe('[POST] /addActivityToTravel', function() {
                         name: "string",
                         type: "string",
                         address: "string",
-                        price: 0,
+                        price: "string",
                         locationId: res.body.id
                     }
 
