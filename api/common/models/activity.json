@@ -1,6 +1,5 @@
 {
   "name": "activity",
-  "plural": "activitys",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {

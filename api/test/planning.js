@@ -97,7 +97,7 @@ describe('[POST] /addActivityToTravel', function() {
                             type: "string",
                             departDate: "2021-06-18T16:25:34.548Z",
                             arrivalDate: "2021-06-18T16:25:34.548Z",
-                            price: "string",
+                            price: 0,
                             fromId: 0,
                             toId: 0
                         }
