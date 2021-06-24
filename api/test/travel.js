@@ -22,7 +22,6 @@ var createTravel = (data, callback) => {
         .end(callback);
 }
 
-
 var createLocation = (data, callback) => {
 
     chai.request("http://localhost:8081/api/locations")
