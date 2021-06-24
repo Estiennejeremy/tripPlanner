@@ -85,7 +85,7 @@ describe('[POST] /addActivityToTravel', function() {
                 createEntity("locations", locationData, async function(err, res) {
                     var activityData = {
                         name: "string",
-                        type: "string",
+                        type: ["bar"],
                         address: "string",
                         price: "string",
                         locationId: res.body.id
