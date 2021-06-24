@@ -86,33 +86,33 @@ module.exports = function(Activity) {
             json: true,
           });
 
+         
           for(var raw of res.features) {
             let location = await app.models.Location.findOrCreate({
                 
               where: { lon: raw.geometry.coordinates[0], lat: raw.geometry.coordinates[1] },
             },
           {
-            lon: raw.properties.lon, 
-            lat: raw.properties.lat,
-            name: raw.properties.location_name
+            lon:  raw.geometry.coordinates[0], 
+            lat: raw.geometry.coordinates[1],
+            name: raw.properties.location_name ? raw.properties.location_name : raw.properties.source
 
 
           });
-          console.log(raw.properties.conditions_fr)
 
             if(location != null) {
-              
+              const name = raw.properties.label ?  raw.properties.label :  raw.properties.name ;
+              const  caddr = raw.properties.location_address ? raw.properties.location_address + " " + raw.properties.location_city : raw.properties.source;
               let activity = await Activity.findOrCreate({
-                where: {name: raw.properties.label}
+                where: {name: name}
             },
             {
-              name: raw.properties.label,
+              name: name,
               type: type,
-              address: raw.properties.location_address + " " + raw.properties.location_city,
+              address: caddr,
               locationId: location[0].id,
               price: raw.properties.conditions_fr != null ? raw.properties.conditions_fr: 0
             })
-            console.log(activity)
 
             allActi.push(activity[0])
           }
