@@ -5,7 +5,7 @@ const apiKey =
   'pk.eyJ1IjoiZGFzaGluIiwiYSI6ImNrcDhjMDNhZDA4bmMydnA3MmxoaHF3NmwifQ.YNRGn0LrTFePlsA-y50qng';
 
 module.exports = function(Location) {
-    (Location.SearchPosition = async function (req, query) {
+    (Location.SearchPosition = async function (req, query, type) {
         try {
           let allLoca = [];
           var app = Location.app;
@@ -13,7 +13,8 @@ module.exports = function(Location) {
             method: 'GET',
             uri: 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + query + '.json' ,
             qs: {
-              access_token: apiKey
+              access_token: apiKey,
+              types: type
             },
             json: true,
           });
@@ -30,6 +31,7 @@ module.exports = function(Location) {
 
 
             });
+            
             if(location != null && raw.place_type == "poi") {
               let activity = await app.models.Activity.findOrCreate({
                 where: {name: raw.place_name}
@@ -108,6 +110,7 @@ module.exports = function(Location) {
         accepts: [
           { arg: 'req', type: 'object', http: { source: 'req' } },
           { arg: 'query', type: 'string', required: true },
+          { arg: 'type', type: 'string', required: false },
           
         ],
         http: { verb: 'GET' },
