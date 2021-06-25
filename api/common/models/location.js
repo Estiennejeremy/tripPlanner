@@ -3,55 +3,41 @@ const request = require('request-promise');
 var Activity = require('./activity');
 const apiKey =
   'pk.eyJ1IjoiZGFzaGluIiwiYSI6ImNrcDhjMDNhZDA4bmMydnA3MmxoaHF3NmwifQ.YNRGn0LrTFePlsA-y50qng';
+const gmapKey = 'AIzaSyAGEZDUwarbOTnRm5uy9T4DaDvRdcgOQpQ';
 
 module.exports = function(Location) {
-    (Location.SearchPosition = async function (req, query, type) {
+    (Location.SearchCity = async function (req, query) {
         try {
           let allLoca = [];
           var app = Location.app;
           const res = await request({
             method: 'GET',
-            uri: 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + query + '.json' ,
+            uri: 'https://maps.googleapis.com/maps/api/place/findplacefromtext/json' ,
             qs: {
-              access_token: apiKey,
-              types: type
+              key: gmapKey,
+              input:query,
+              fields: "formatted_address,name,geometry",
+              inputtype: "textquery"
             },
             json: true,
           });
 
-          for(var raw of res.features) {
+         console.log(res.candidates[0]);
             let location = await Location.findOrCreate({
                 
-                where: { lon: raw.geometry.coordinates[0], lat: raw.geometry.coordinates[1] },
+                where: { lon: res.candidates[0].geometry.location.lng, lat: res.candidates[0].geometry.location.lat },
               },
             {
-              lon: raw.geometry.coordinates[0], 
-              lat: raw.geometry.coordinates[1],
-              name: raw.place_name
+              lon: res.candidates[0].geometry.location.lng, 
+              lat: res.candidates[0].geometry.location.lat,
+              name: res.candidates[0].formatted_address
 
 
             });
-            
-            if(location != null && raw.place_type == "poi") {
-              let activity = await app.models.Activity.findOrCreate({
-                where: {name: raw.place_name}
-            },
-            {
-              name: raw.place_name,
-              type: raw.properties.category,
-              address: raw.properties.address,
-              locationId: location[0].id,
-              price: 0
-            })
+    
 
-            location[0].activity = activity[0];
-          }
-          
-            allLoca.push(location[0])
-
-          }
          
-          return allLoca;
+          return location[0];
 
         } catch (err) {
           console.error(err);
@@ -106,11 +92,10 @@ module.exports = function(Location) {
       http: { verb: 'GET' },
       returns: { type: 'object', root: true },
     })
-    Location.remoteMethod('SearchPosition', {
+    Location.remoteMethod('SearchCity', {
         accepts: [
           { arg: 'req', type: 'object', http: { source: 'req' } },
           { arg: 'query', type: 'string', required: true },
-          { arg: 'type', type: 'string', required: false },
           
         ],
         http: { verb: 'GET' },

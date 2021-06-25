@@ -3,6 +3,7 @@ const request = require('request-promise');
 var Location = require('./location');
 const apiKey =
   'pk.eyJ1IjoiZGFzaGluIiwiYSI6ImNrcDhjMDNhZDA4bmMydnA3MmxoaHF3NmwifQ.YNRGn0LrTFePlsA-y50qng';
+const gmapKey = 'AIzaSyAGEZDUwarbOTnRm5uy9T4DaDvRdcgOQpQ';
 module.exports = function(Activity) {
 
     (Activity.getByIdLocation = async function (req, id) {
@@ -59,9 +60,65 @@ module.exports = function(Activity) {
                 price: 0
               })
 
+            
+
               allActi.push(activity[0])
             }
 
+          }
+         
+          return allActi;
+
+        } catch (err) {
+          console.error(err);
+        }
+      }),
+      (Activity.getActivitesByCity = async function (req, coord, radius, type) {
+        try {
+
+         let allActi = [];
+          var app = Activity.app;
+          const res = await request({
+            method: 'GET',
+            uri: 'https://maps.googleapis.com/maps/api/place/nearbysearch/json' ,
+            qs: {
+              key: gmapKey,
+              location: coord,
+              radius: radius,
+              type: type
+            },
+            json: true,
+          });
+
+          for(var raw of res.results) {
+
+            let location = await app.models.Location.findOrCreate({
+                
+              where: { lon: raw.geometry.location.lng, lat: raw.geometry.location.lat },
+            },
+          {
+            lon:   raw.geometry.location.lng, 
+            lat: raw.geometry.location.lat,
+            name: raw.name
+
+
+          });
+            if(location != null) {
+              let activity = await Activity.findOrCreate({
+                where: {name: raw.name, address:raw.vicinity}
+            },
+            {
+              name: raw.name,
+              type: raw.types,
+              address: raw.vicinity,
+              locationId: location[0].id,
+              location: location[0],
+              price:  Math.floor(Math.random() * 20)
+            })
+            activity[0].lon = raw.geometry.location.lng, 
+            activity[0].lat = raw.geometry.location.lat
+            allActi.push(activity[0])
+           }
           }
          
           return allActi;
@@ -111,7 +168,7 @@ module.exports = function(Activity) {
               type: type,
               address: caddr,
               locationId: location[0].id,
-              price: raw.properties.conditions_fr != null ? raw.properties.conditions_fr: 0
+              price:  Math.floor(Math.random() * 20)
             })
 
             allActi.push(activity[0])
@@ -140,7 +197,18 @@ module.exports = function(Activity) {
           { arg: 'coord', type: 'array', required: true }, 
           { arg: 'start', type: 'string', required: true },
           { arg: 'stop', type: 'string', required: true },
-          { arg: 'type', type: 'string', required: true },
+          { arg: 'type', type: 'string', required: false },
+          
+        ],
+        http: { verb: 'GET' },
+        returns: { type: 'object', root: true },
+      }),
+      Activity.remoteMethod('getActivitesByCity', {
+        accepts: [
+          { arg: 'req', type: 'object', http: { source: 'req' } },
+          { arg: 'coord', type: 'string', required: true }, 
+          { arg: 'radius', type: 'number', required: true },
+          { arg: 'type', type: 'array', required: false },
           
         ],
         http: { verb: 'GET' },
