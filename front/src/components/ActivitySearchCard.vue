@@ -15,14 +15,14 @@
           vs-align="center"
           class="card-header"
         >
-          <h2>{{ title }}</h2>
+          <h2>{{ activityData.name }}</h2>
         </vs-row>
         <vs-row class="description">
           <p id="font">Description</p>
         </vs-row>
         <vs-row id="font" class="card-footer" vs-align="flex-end">
-          <vs-col vs-type="flex" vs-align="center" vs-w="3"
-            >Prix</vs-col
+          <vs-col vs-type="flex" vs-align="center" vs-w="5"
+            >Prix : {{activityData.price}}</vs-col
           >
           <vs-col vs-type="flex" vs-align="center" vs-w="3"
             >Type de lieu</vs-col
@@ -35,7 +35,7 @@
       :active.sync="openTripModal"
       style="z-index: 10"
     >
-      <AddToTripModal :close="closeModal" />
+      <AddToTripModal :close="closeModal" :activityId="activityData.id" :date="date"/>
     </vs-popup>
   </div>
 </template>
@@ -43,17 +43,20 @@
 <script>
 import "material-icons/iconfont/material-icons.css";
 import AddToTripModal from "./AddToTripModal.vue";
-import Cookies from 'js-cookie';
 
 export default {
   name: "ActivitySearchCard",
   components: { AddToTripModal },
   props: {
-    title: {
-      type: String,
+    activityData: {
+      type: Object,
       required: true,
     },
     imgSrc: {
+      type: String,
+      required: true,
+    },
+    date: {
       type: String,
       required: true,
     },
@@ -65,11 +68,7 @@ export default {
   },
   methods: {
     openModal() {
-      if (Cookies.get("token")) {
-        this.openTripModal = true;
-      } else {
-        this.$router.push("/connection");
-      }
+      this.openTripModal = true;
     },
     closeModal() {
       this.openTripModal = false;

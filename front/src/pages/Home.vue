@@ -124,22 +124,6 @@
               vs-xs="10"
               vs-justify="center"
             >
-              <vs-select v-model="selectedType" label="Transportation" multiple>
-                <vs-select-item
-                  :key="index"
-                  :value="item.value"
-                  :text="item.text"
-                  v-for="(item, index) in transportTypes"
-                />
-              </vs-select>
-            </vs-col>
-            <vs-col
-              vs-type="flex"
-              vs-lg="2"
-              vs-sm="2"
-              vs-xs="10"
-              vs-justify="center"
-            >
               <vs-input
                 type="date"
                 :min="getDate"
@@ -165,6 +149,7 @@
 <script>
 import '@mapbox/mapbox-gl-geocoder/lib/mapbox-gl-geocoder.css';
 import Footer from '../components/Footer.vue';
+import {getOrCreate} from '../api_wrapper/locations';
 
 export default {
   name: 'Home',
@@ -194,11 +179,14 @@ export default {
     },
   },
   methods: {
-    searchActivity() {
-      this.$router.push(`/search/activity?lat=${this.place.lat}&lon=${this.place.lon}`);
+    async searchActivity() {
+      const city = await getOrCreate({lon: this.place.lon, lat: this.place.lat, name: this.place.name});
+      this.$router.push(`/search/activity?placeId=${city.id}&date=${this.selectedDate}`);
     },
-    searchTransport() {
-      this.$router.push(`/search/transport?lat=${this.from.lat}&lon=${this.from.lon}`);
+    async searchTransport() {
+      const from = await getOrCreate({lon: this.from.lon, lat: this.from.lat, name: this.from.name});
+      const to = await getOrCreate({lon: this.to.lon, lat: this.to.lat, name: this.to.name});
+      this.$router.push(`/search/transport?fromId=${from.id}&toId=${to.id}&date=${this.selectedDate}`);
     },
     getFromLocation(res) {
       this.from = {

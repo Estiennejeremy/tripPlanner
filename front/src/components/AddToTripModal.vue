@@ -27,6 +27,7 @@ import "material-icons/iconfont/material-icons.css";
 import { getUserTripsByUserId } from "../api_wrapper/travels";
 import Cookies from "js-cookie";
 import { getUserByToken } from "../api_wrapper/users";
+import { addActivityToTrip, addTransportToTrip } from "../api_wrapper/planning";
 
 export default {
   name: "AddToTripModal",
@@ -42,9 +43,36 @@ export default {
       type: Function,
       required: true,
     },
+    activityId: {
+      type: Number,
+      default: null,
+    },
+    transportId: {
+      type: Number,
+      default: null,
+    },
+    date: {
+      type: String,
+      default: ''
+    }
   },
   methods: {
-    addToTrip() {
+    async addToTrip() {
+      if (this.activityId) {
+        const res = await addActivityToTrip({
+          travelId: this.selectedData,
+          date: this.date,
+          activityId: this.activityId
+        });
+      }
+      if (this.transportId) {
+        const res = await addTransportToTrip({
+          travelId: this.selectedData,
+          date: this.date,
+          transportId: this.transportId
+        });
+      }
+      this.close();
     }
   },
   async mounted() {
