@@ -160,6 +160,7 @@ export default {
         { value: 'restaurant', text: 'Restaurant' },
         { value: 'hotel', text: 'Hotel' },
         { value: 'bar', text: 'Bar' },
+        { value: 'activity', text: 'Activities' },
       ],
       transportTypes: [
         { value: 'train', text: 'Train' },
@@ -181,7 +182,7 @@ export default {
   methods: {
     async searchActivity() {
       const city = await getOrCreate({lon: this.place.lon, lat: this.place.lat, name: this.place.name});
-      this.$router.push(`/search/activity?placeId=${city.id}&date=${this.selectedDate}`);
+      this.$router.push(`/search/activity?placeId=${city.id}&date=${this.selectedDate}&type=${this.selectedType}`);
     },
     async searchTransport() {
       const from = await getOrCreate({lon: this.from.lon, lat: this.from.lat, name: this.from.name});

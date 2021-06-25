@@ -13,14 +13,14 @@
             <vs-row vs-type="flex" vs-justify="center" vs-w="12" class="checkboxes">
               <vs-col v-if="isActivity" vs-justify="space-between" vs-w="9">
                 <vs-row id="font">
-                  <vs-checkbox v-model="activities" id="font"
+                  <vs-checkbox v-model="activitiesChecked" vs-value="tourist_attraction" id="font"
                     >Activities</vs-checkbox
                   >
-                  <vs-checkbox v-model="restaurants" id="font"
+                  <vs-checkbox v-model="activitiesChecked" vs-value="restaurant" id="font"
                     >Restaurants</vs-checkbox
                   >
-                  <vs-checkbox v-model="hotels" id="font">Hotels</vs-checkbox>
-                  <vs-checkbox v-model="bars" id="font">Bars</vs-checkbox>
+                  <vs-checkbox v-model="activitiesChecked" vs-value="hotel" id="font">Hotels</vs-checkbox>
+                  <vs-checkbox v-model="activitiesChecked" vs-value="bar" id="font">Bars</vs-checkbox>
                 </vs-row>
               </vs-col>
               <vs-col
@@ -59,22 +59,6 @@
                 vs-sm="5"
                 vs-xs="12"
               >
-                <vs-select placeholder="Price" v-model="priceText" label="Price">
-                  <div class="slider">
-                    <vs-slider
-                      v-model="price"
-                      text-fixed="€"
-                      v-on:change="setPrice"
-                    />
-                  </div>
-                </vs-select>
-              </vs-col>
-              <vs-col
-                vs-type="flex"
-                vs-lg="5"
-                vs-sm="5"
-                vs-xs="12"
-              >
                 <vs-input
                   type="date"
                   :min="getDate"
@@ -98,7 +82,7 @@
                     :limit="2"
                     @mb-result="
                       (res) => {
-                        getToLocation(res);
+                        getCityLocation(res);
                       }
                     "
                     class="places-input"
@@ -107,17 +91,15 @@
               </vs-col>
               <vs-col
                 vs-type="flex"
-                vs-lg="12"
-                vs-sm="12"
+                vs-lg="5"
+                vs-sm="5"
                 vs-xs="12"
               >
-              <vs-row vs-type="flex" vs-justify="center" vs-w="12">
                 <vs-button
                     type="relief"
                     class='button'
-                    @click.prevent="searchActis"
+                    @click.prevent="search"
                   >Search</vs-button>
-              </vs-row>
               </vs-col>
             </vs-row>
             <vs-row vs-type="flex" vs-justify="space-around" vs-w="12" v-if="isTransport">
@@ -198,9 +180,9 @@
             <activity-search-card
               v-for="(activity, index) in activitiesArray"
               :key="index"
-              @click.native="selectPin(activity.long, activity.lat)"
+              @click.native="selectPin(activity.lon, activity.lat)"
               :activityData="activity"
-              :date="date"
+              :date="selectedDate"
               imgSrc="https://img-19.ccm2.net/8vUCl8TXZfwTt7zAOkBkuDRHiT8=/1240x/smart/b829396acc244fd484c5ddcdcb2b08f3/ccmcms-commentcamarche/20494859.jpg"
             />
           </div>
@@ -241,10 +223,7 @@ export default {
       map: {},
       accessToken: 'pk.eyJ1IjoidGlmYWluZWsiLCJhIjoiY2tvY3k4OW1pMG1nNjJvbjFwcnNzNWI4eiJ9.4GbB9581EIhx7AA43BpmTg',
       mapStyle: 'mapbox://styles/tifainek/ckor6l9ku14w217q9l71uvj2y',
-      restaurants: true,
-      hotels: true,
-      bars: true,
-      activities: true,
+      activitiesChecked: [],
       foot: true,
       bike: true,
       car: true,
@@ -260,22 +239,11 @@ export default {
       city: '',
       to: '',
       from: '',
-      activitiesArray: [
-        {
-          name: "Activité 1",
-          lat: 43.6333,
-          long: 1.4,
-        },
-        {
-          name: "Activité 2",
-          lat: 43.6043,
-          long: 1.4437,
-        }
-      ],
+      activitiesArray: [],
       transportsArray: [],
       selectedCoord: {
         lat: 0,
-        long: 0,
+        lon: 0,
       },
       markers: [],
       date: '',
@@ -302,25 +270,32 @@ export default {
         name: res.result.text,
       };
     },
-    selectPin(long, lat) {
-      if (this.selectedCoord.long !== 0 && this.selectedCoord.lat !== 0) {
+    getCityLocation(res) {
+      this.city = {
+        lat: res.result.center[1],
+        lon: res.result.center[0],
+        name: res.result.text,
+      };
+    },
+    selectPin(lon, lat) {
+      if (this.selectedCoord.lon !== 0 && this.selectedCoord.lat !== 0) {
         const marker = new mapboxgl.Marker({ color: '#118AB2' })
-          .setLngLat([this.selectedCoord.long, this.selectedCoord.lat])
+          .setLngLat([this.selectedCoord.lon, this.selectedCoord.lat])
           .addTo(this.map);
         this.markers.push(marker)
       }
-      this.selectedCoord.long = long;
+      this.selectedCoord.lon = lon;
       this.selectedCoord.lat = lat;
       const marker2 = new mapboxgl.Marker({ color: '#fc2171' })
-        .setLngLat([this.selectedCoord.long, this.selectedCoord.lat])
+        .setLngLat([this.selectedCoord.lon, this.selectedCoord.lat])
         .addTo(this.map);
       this.markers.push(marker2)
-      this.map.flyTo({center: [long, lat], zoom: 10, speed: 0.5,})
+      this.map.flyTo({center: [lon, lat], zoom: 15, speed: 1,})
     },
     addMarkers() {
       for (let i = 0; i < this.coordArray.length; i += 1) {
       let marker = new mapboxgl.Marker({ color: '#118AB2' })
-        .setLngLat([this.coordArray[i].long, this.coordArray[i].lat])
+        .setLngLat([this.coordArray[i].lon, this.coordArray[i].lat])
         .addTo(this.map);
       this.markers.push(marker);
       };
@@ -331,18 +306,19 @@ export default {
     },
     async getAndFormatActivities() {
       this.city = await getLocationById(this.cityId);
-      // this.activitiesArray = await getLocationsActivities({
-      //   lon: this.city.lon,
-      //   lat: this.city.lat,
-      //   range: this.range,
-      //   start: this.city.date,
-      //   stop: this.city.date
-      // });
-      // for (let i = 0; i < this.activitiesArray.length; i++) {
-      //   let location = await getLocationById(this.activitiesArray[i].locationId);
-      //   this.activitiesArray[i].long = location.lon;
-      //   this.activitiesArray[i].lat = location.lat;
-      // } 
+      this.activitiesArray = await getLocationsActivities({
+        lon: this.city.lon,
+        lat: this.city.lat,
+        range: this.range,
+        types: ['tourist_attraction', 'restaurant', 'hotel', 'bar']
+      });
+      this.activitiesArray = this.activitiesArray.filter(activity => this.isValueInCheckedArray(activity.type[0]))
+    },
+    isValueInCheckedArray(value) {
+      for (let i = 0; i < this.activitiesChecked.length; i++) {
+        if (value === this.activitiesChecked[i]) return true;
+      }
+      return false;
     },
     async getAndFormatTransport() {
       this.from = await getLocationById(this.fromId);
@@ -366,7 +342,14 @@ export default {
       }
     },
     async search() {
-      if (this.$route.name === 'SearchActivity') console.log('ok');
+      if (this.isActivity) {
+        this.city = await getOrCreate({lon: this.city.lon, lat: this.city.lat, name: this.city.name});
+        this.cityId = this.city.id.toString();
+        this.removeMarkers();
+        this.map.flyTo({center: [this.city.lon, this.city.lat], zoom: 10, speed: 1,})
+        await this.getAndFormatActivities();
+        this.addMarkers();
+      }
       else {
         this.from = await getOrCreate({lon: this.from.lon, lat: this.from.lat, name: this.from.name});
         this.to = await getOrCreate({lon: this.to.lon, lat: this.to.lat, name: this.to.name});
@@ -377,9 +360,6 @@ export default {
         this.map.flyTo({center: [this.from.lon, this.from.lat], zoom: 5, speed: 1,})
         await this.getAndFormatTransport();
       }
-    },
-    async searchActis() {
-      console.log("ok");
     },
   },
   computed: {
@@ -394,11 +374,10 @@ export default {
     },
     coordArray() {
       if (this.isActivity) {
-        console.log(this.activitiesArray)
         return this.activitiesArray;
       } 
       else {
-        return [{long: this.from.lon, lat: this.from.lat}, {long: this.to.lon, lat: this.to.lat}]
+        return [{lon: this.from.lon, lat: this.from.lat}, {lon: this.to.lon, lat: this.to.lat}]
       }
     }
   },
@@ -407,9 +386,10 @@ export default {
     mapboxgl.accessToken = this.accessToken;
     this.setRange();
     this.selectedDate = this.$route.query.date;
-    let zoom = 9;
+    let zoom = 12;
     if (this.isActivity) {
       this.cityId = this.$route.query.placeId;
+      this.activitiesChecked.push(this.$route.query.type)
       await this.getAndFormatActivities();
     }
     else {
@@ -421,7 +401,7 @@ export default {
     this.map = new mapboxgl.Map({
       container: 'map', // container id
       style: this.mapStyle, // style URL
-      center: [this.$route.query.lon || this.coordArray[0].long, this.$route.query.lat || this.coordArray[0].lat], // starting position [lng, lat]
+      center: [this.$route.query.lon || this.coordArray[0].lon, this.$route.query.lat || this.coordArray[0].lat], // starting position [lng, lat]
       zoom: zoom // starting zoom
     });
     this.addMarkers();

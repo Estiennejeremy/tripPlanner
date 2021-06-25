@@ -75,7 +75,7 @@ module.exports = function (Activity) {
         console.error(err);
       }
     }),
-    (Activity.getActivitesByCity = async function (req, coord, radius, type) {
+    (Activity.getActivitesByCity = async function (coord, radius, type) {
       try {
         let allActi = [];
         var app = Activity.app;
@@ -111,8 +111,8 @@ module.exports = function (Activity) {
                 where: { name: raw.name, address: raw.vicinity },
               },
               {
-                name: raw.name,
-                type: raw.types,
+                name: raw.name.replace('-', ' '),
+                type: [type],
                 address: raw.vicinity,
                 locationId: location[0].id,
                 location: location[0],
@@ -124,7 +124,6 @@ module.exports = function (Activity) {
             allActi.push(activity[0]);
           }
         }
-
         return allActi;
       } catch (err) {
         console.error(err);
@@ -216,10 +215,9 @@ module.exports = function (Activity) {
     }),
     Activity.remoteMethod('getActivitesByCity', {
       accepts: [
-        { arg: 'req', type: 'object', http: { source: 'req' } },
         { arg: 'coord', type: 'string', required: true },
         { arg: 'radius', type: 'number', required: true },
-        { arg: 'type', type: 'array', required: false },
+        { arg: 'type', type: 'string', required: false },
       ],
       http: { verb: 'GET' },
       returns: { type: 'object', root: true },

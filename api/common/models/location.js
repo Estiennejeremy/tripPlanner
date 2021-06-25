@@ -83,6 +83,21 @@ module.exports = function (Location) {
         console.error(err);
       }
     }),
+    (Location.getOrCreate = async function (lon, lat, name) {
+      try {
+        const location = await Location.findOrCreate(
+          { where: { name: name } },
+          {
+            name: name,
+            lon: lon,
+            lat: lat,
+          },
+        );
+        return location[0];
+      } catch (err) {
+        console.error(err);
+      }
+    }),
     Location.remoteMethod('reverse', {
       accepts: [
         { arg: 'req', type: 'object', http: { source: 'req' } },
@@ -96,6 +111,15 @@ module.exports = function (Location) {
     accepts: [
       { arg: 'req', type: 'object', http: { source: 'req' } },
       { arg: 'query', type: 'string', required: true },
+    ],
+    http: { verb: 'GET' },
+    returns: { type: 'object', root: true },
+  });
+  Location.remoteMethod('getOrCreate', {
+    accepts: [
+      { arg: 'lon', type: 'string', required: true },
+      { arg: 'lat', type: 'string', required: true },
+      { arg: 'name', type: 'string', required: true },
     ],
     http: { verb: 'GET' },
     returns: { type: 'object', root: true },
