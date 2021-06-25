@@ -11,19 +11,11 @@
       "type": "number",
       "required": true
     },
-    "type": {
-      "type": "string",
+    "duration": {
+      "type": "number",
       "required": true
     },
-    "departDate": {
-      "type": "date",
-      "required": true
-    },
-    "arrivalDate": {
-      "type": "date",
-      "required": true
-    },
-    "price": {
+    "distance": {
       "type": "number",
       "required": true
     }
