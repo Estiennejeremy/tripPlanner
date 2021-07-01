@@ -23,4 +23,18 @@ export async function getLocationsActivities(data) {
   }
 }
 
+export async function getActivityById(activityId) {
+  try {
+    const res = await fetch(`${config.api_url}/activities/${activityId}`, {
+      method: 'GET',
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+    });
+    return await res.json();
+  } catch (e) {
+    return { error: e };
+  }
+}
+
 // library auqarium bar museum cafe campground park church mosque restaurant stadium synagogue tourist_attraction zoo

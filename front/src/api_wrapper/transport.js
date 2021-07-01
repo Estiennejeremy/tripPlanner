@@ -39,3 +39,17 @@ export async function getOrCreateTransport(data) {
     return { error: e };
   }
 }
+
+export async function getTransportById(transportId) {
+  try {
+    const res = await fetch(`${config.api_url}/transports/${transportId}`, {
+      method: 'GET',
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+    });
+    return await res.json();
+  } catch (e) {
+    return { error: e };
+  }
+}

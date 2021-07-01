@@ -190,9 +190,7 @@
             <transport-search-card 
               v-for="(transport, index) in transportsArray"
               :key="index"
-              :title="transport.title"
-              :distance="transport.distance"
-              :time="transport.time"
+              :transportData="transport"
               :fromId="fromId"
               :toId="toId"
               :date="selectedDate"
@@ -335,7 +333,6 @@ export default {
       });
       for (let i = 0; i < this.transportsArray.length; i++) {
         this.transportsArray[i] = {
-          title: `From ${this.from.name} to ${this.to.name}`,
           time: Math.round(this.transportsArray[i].duration  / 3600),
           distance: Math.round(this.transportsArray[i].distance / 1000),
         };

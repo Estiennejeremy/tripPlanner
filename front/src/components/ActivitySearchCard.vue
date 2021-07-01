@@ -2,10 +2,18 @@
   <div class="card-content">
     <vs-row>
       <vs-icon
+        v-if="isAddDisplay"
         icon="add"
         size="small"
         class="add-icon"
         @click.prevent="openModal()"
+      ></vs-icon>
+      <vs-icon
+        v-else
+        icon="delete"
+        size="small"
+        class="add-icon"
+        @click.prevent="deleteActivity(activityData.planningId)"
       ></vs-icon>
       <vs-col vs-w="4" vs-justify="center" vs-align="center" vs-type="flex">
         <img :src="imgSrc" class="img-slot" />
@@ -18,14 +26,14 @@
           <h2>{{ activityData.name }}</h2>
         </vs-row>
         <vs-row class="description">
-          <p id="font">Description</p>
+          <p id="font">{{activityData.address}}</p>
         </vs-row>
         <vs-row id="font" class="card-footer" vs-align="flex-end">
           <vs-col vs-type="flex" vs-align="center" vs-w="5"
-            >Prix : {{activityData.price}}</vs-col
+            >Prix : {{activityData.price}}€</vs-col
           >
-          <vs-col vs-type="flex" vs-align="center" vs-w="3"
-            >Type de lieu</vs-col
+          <vs-col vs-type="flex" vs-align="center" vs-w="5"
+            >{{typesCorresp[activityData.type[0]]}}</vs-col
           >
         </vs-row>
       </vs-col>
@@ -43,6 +51,7 @@
 <script>
 import "material-icons/iconfont/material-icons.css";
 import AddToTripModal from "./AddToTripModal.vue";
+import { deletePlanningById } from '../api_wrapper/planning';
 
 export default {
   name: "ActivitySearchCard",
@@ -60,10 +69,20 @@ export default {
       type: String,
       required: true,
     },
+    deleteActivity: {
+      type: Function,
+      default: () => {}
+    }
   },
   data() {
     return {
       openTripModal: false,
+      typesCorresp: {
+        hotel: 'Hotel',
+        bar: 'Bar',
+        restaurant: 'Restaurant',
+        tourist_attraction: "Cultural activity",
+      }
     };
   },
   methods: {
@@ -73,7 +92,16 @@ export default {
     closeModal() {
       this.openTripModal = false;
     },
+    // async deleteActivity() {
+    //   // await deletePlanningById(this.activityData.planningId);
+    //   this.$emit('updateActivities', true);
+    // }
   },
+  computed: {
+    isAddDisplay() {
+      return this.$route.name !== "Trip";
+    }
+  }
 };
 </script>
 
@@ -106,7 +134,7 @@ export default {
   padding: 5px;
   position: absolute;
   bottom: 5%;
-  max-width: 400px;
+  max-width: 330px;
 }
 
 .click {

@@ -2,10 +2,18 @@
   <div class="card-content">
     <vs-row id="font">
       <vs-icon
+      v-if="isAddDisplay"
         icon="add"
         size="small"
         class="add-icon"
         @click="openModal()"
+      ></vs-icon>
+      <vs-icon
+        v-else
+        icon="delete"
+        size="small"
+        class="add-icon"
+        @click.prevent="deleteActivity(transportData.planningId)"
       ></vs-icon>
       <vs-row
         vs-type="flex"
@@ -21,7 +29,7 @@
         vs-align="center"
         class="row-content"
       >
-        {{distance}} km
+        {{transportData.distance}} km
       </vs-row>
       <vs-row
         vs-type="flex"
@@ -29,7 +37,7 @@
         vs-align="center"
         class="row-content"
       >
-        {{time}} h
+        {{transportData.duration}} h
       </vs-row>
     </vs-row>
     <vs-popup
@@ -46,22 +54,15 @@
 import "material-icons/iconfont/material-icons.css";
 import AddToTripModal from "./AddToTripModal.vue";
 import { getOrCreateTransport } from '../api_wrapper/transport';
+import {getLocationById} from '../api_wrapper/locations';
 
 export default {
   name: "TransportSearchCard",
   components: { AddToTripModal },
   props: {
-    time: {
-      type: Number,
-      default: 0,
-    },
-    distance: {
-      type: Number,
-      default: 0,
-    },
-    title: {
-      type: String,
-      default: '',
+    transportData: {
+      type: Object,
+      required: true,
     },
     fromId: {
       type: String,
@@ -74,12 +75,17 @@ export default {
     date: {
       type: String,
       defult: '',
+    },
+    deleteActivity: {
+      type: Function,
+      default: () => {}
     }
   },
   data() {
     return {
       openTripModal: false,
       transportId: null,
+      title: '',
     };
   },
   methods: {
@@ -90,8 +96,16 @@ export default {
       this.openTripModal = false;
     },
   },
+  computed: {
+    isAddDisplay() {
+      return this.$route.name !== "Trip";
+    }
+  },
   async mounted() {
-    const transport = await getOrCreateTransport({fromId: this.fromId, toId: this.toId, duration: this.time, distance: this.distance});
+    this.from = await getLocationById(this.fromId);
+    this.to = await getLocationById(this.toId);
+    this.title = `From ${this.from.name} to ${this.to.name}`;
+    const transport = await getOrCreateTransport({fromId: this.fromId, toId: this.toId, duration: this.transportData.duration, distance: this.transportData.distance});
     this.transportId = transport.id;
   }
 };
