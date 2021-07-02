@@ -36,7 +36,7 @@
               vs-xs="10"
               vs-justify="center"
             >
-              <vs-select v-model="selectedType" label="Activity" multiple>
+              <vs-select v-model="selectedType" label="Activity">
                 <vs-select-item
                   :key="index"
                   :value="item.value"
