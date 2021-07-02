@@ -58,6 +58,7 @@
                 :value="getDate"
                 label="Date"
                 v-model="selectedDate"
+                name="date"
               />
             </vs-col>
           </vs-row>

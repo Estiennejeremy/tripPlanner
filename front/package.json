@@ -6,13 +6,16 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "dev": "npm run serve"
+    "dev": "npm run serve",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run --record --key f88af61b-fa92-4216-a997-ca35052e90c4"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.3",
     "@mapbox/mapbox-gl-geocoder": "^4.7.0",
     "@studiometa/vue-mapbox-gl": "^1.4.7",
     "core-js": "^3.6.5",
+    "dayjs": "^1.10.5",
     "js-cookie": "^2.2.1",
     "mapbox-gl": "^2.2.0",
     "material-icons": "^0.6.3",
@@ -28,6 +31,7 @@
     "@vue/cli-plugin-eslint": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
     "babel-eslint": "^10.1.0",
+    "cypress": "^7.6.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
     "sass": "^1.32.12",
