@@ -180,7 +180,7 @@
             <activity-search-card
               v-for="(activity, index) in activitiesArray"
               :key="index"
-              @click.native="selectPin(activity.lon, activity.lat)"
+              @click.native="selectPin(activity.lon, activity.lat, activity.type[0])"
               :activityData="activity"
               :date="selectedDate"
               imgSrc="https://img-19.ccm2.net/8vUCl8TXZfwTt7zAOkBkuDRHiT8=/1240x/smart/b829396acc244fd484c5ddcdcb2b08f3/ccmcms-commentcamarche/20494859.jpg"
@@ -275,16 +275,16 @@ export default {
         name: res.result.text,
       };
     },
-    selectPin(lon, lat) {
+    selectPin(lon, lat, type) {
       if (this.selectedCoord.lon !== 0 && this.selectedCoord.lat !== 0) {
-        const marker = new mapboxgl.Marker({ color: '#118AB2' })
+        const marker = new mapboxgl.Marker({ color: '#00A6A6' })
           .setLngLat([this.selectedCoord.lon, this.selectedCoord.lat])
           .addTo(this.map);
         this.markers.push(marker)
       }
       this.selectedCoord.lon = lon;
       this.selectedCoord.lat = lat;
-      const marker2 = new mapboxgl.Marker({ color: '#fc2171' })
+      const marker2 = new mapboxgl.Marker({ color: this.colorByType(type) })
         .setLngLat([this.selectedCoord.lon, this.selectedCoord.lat])
         .addTo(this.map);
       this.markers.push(marker2)
@@ -292,7 +292,7 @@ export default {
     },
     addMarkers() {
       for (let i = 0; i < this.coordArray.length; i += 1) {
-      let marker = new mapboxgl.Marker({ color: '#118AB2' })
+      let marker = new mapboxgl.Marker({ color: '#00A6A6' })
         .setLngLat([this.coordArray[i].lon, this.coordArray[i].lat])
         .addTo(this.map);
       this.markers.push(marker);
@@ -358,6 +358,20 @@ export default {
         await this.getAndFormatTransport();
       }
     },
+    colorByType(type) {
+      switch (type) {
+        case 'tourist_attraction':
+          return '#6BAB90';
+        case 'hotel':
+          return '#837CB6';
+        case 'bar':
+          return '#F0B96A';
+        case 'restaurant':
+          return '#D17B88';
+        default:
+          return '#6BAB90';
+      }
+    },
   },
   computed: {
     getDate() {
@@ -371,12 +385,13 @@ export default {
     },
     coordArray() {
       if (this.isActivity) {
+
         return this.activitiesArray;
       } 
       else {
         return [{lon: this.from.lon, lat: this.from.lat}, {lon: this.to.lon, lat: this.to.lat}]
       }
-    }
+    },
   },
 
   async mounted() {
@@ -398,7 +413,7 @@ export default {
     this.map = new mapboxgl.Map({
       container: 'map', // container id
       style: this.mapStyle, // style URL
-      center: [this.$route.query.lon || this.coordArray[0].lon, this.$route.query.lat || this.coordArray[0].lat], // starting position [lng, lat]
+      center: [this.coordArray[0]?.lon, this.coordArray[0]?.lat], // starting position [lng, lat]
       zoom: zoom // starting zoom
     });
     this.addMarkers();

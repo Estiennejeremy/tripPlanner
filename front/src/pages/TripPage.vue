@@ -148,14 +148,14 @@ export default {
     async selectPin(activity) {
       const location = await getLocationById(activity.locationId);
       if (this.selectedCoord.lon !== 0 && this.selectedCoord.lat !== 0) {
-        const marker = new mapboxgl.Marker({ color: '#118AB2' })
+        const marker = new mapboxgl.Marker({ color: '#00A6A6' })
           .setLngLat([this.selectedCoord.lon, this.selectedCoord.lat])
           .addTo(this.map);
         this.markers.push(marker)
       }
       this.selectedCoord.lon = location.lon;
       this.selectedCoord.lat = location.lat;
-      const marker2 = new mapboxgl.Marker({ color: '#fc2171' })
+      const marker2 = new mapboxgl.Marker({ color: this.colorByType(activity.type[0]) })
         .setLngLat([this.selectedCoord.lon, this.selectedCoord.lat])
         .addTo(this.map);
       this.markers.push(marker2)
@@ -163,7 +163,7 @@ export default {
     },
     addMarkers() {
       for (let i = 0; i < this.coordArray.length; i += 1) {
-        let marker = new mapboxgl.Marker({ color: '#118AB2' })
+        let marker = new mapboxgl.Marker({ color: '#00A6A6' })
           .setLngLat([this.coordArray[i].lon, this.coordArray[i].lat])
           .addTo(this.map);
         this.markers.push(marker);
@@ -200,7 +200,21 @@ export default {
         transport: [],
       }
       await this.getAndFormatActivities();
-    }
+    },
+    colorByType(type) {
+      switch (type) {
+        case 'tourist_attraction':
+          return '#6BAB90';
+        case 'hotel':
+          return '#837CB6';
+        case 'bar':
+          return '#F0B96A';
+        case 'restaurant':
+          return '#D17B88';
+        default:
+          return '#6BAB90';
+      }
+    },
   },
   computed: {
     sectionsArray() {
