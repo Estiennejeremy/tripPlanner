@@ -90,8 +90,13 @@ module.exports = function (Activity) {
           },
           json: true,
         });
+        if(!res.results[0]) 
+        {
+          return { error: 'Missing data' };
+        }
 
         for (var raw of res.results) {
+         
           let location = await app.models.Location.findOrCreate(
             {
               where: {

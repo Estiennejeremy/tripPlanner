@@ -1,7 +1,7 @@
 var assert = require('assert');
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const url = "http://localhost:8081/api/"
+const url = "http://localhost:8081/api/activities"
 const { expect } = require('chai');
 
 
@@ -29,9 +29,9 @@ var getCityCoords = (query, callback) => {
         .end(callback)
 }
 
-var getActivitesByCity = (data, callback) => {
+var getActivitesByCoords = (data, callback) => {
     chai.request(url)
-        .get("/getActivitesByCity?coords=" + data.query + "&radius=" + data.radius + "&type=" + data.type)
+        .get("/getActivitesByCity?coord=" + data.coords + "&radius=" + data.radius + "&type=" + data.type)
         .end(callback)
 }
 
@@ -40,9 +40,7 @@ describe('[GET] /getActivitesByCity', function() {
         var data = {
             query: "new york",
           }
-
-
-
+          
         getCityCoords(data.query, function(err, res) {
             if (err) {
                 assert.strictEqual(1, 0);
@@ -56,6 +54,26 @@ describe('[GET] /getActivitesByCity', function() {
         done();
     });
 
+    it('location should get return a error', function(done) {
+
+          var data2 = {
+            query: "hniulnfleznfilenfleznflzfzefzefiubl",
+          }
+
+
+
+        getCityCoords(data2.query, function(err, res) {
+            if (err) {
+                assert.strictEqual(1, 0);
+            }
+            var loc = res.body;
+            var err = res.body.error;
+            expect(err).to.exist;
+            expect(err).to.equal("Missing data");
+        })
+        done();
+    });
+
     it('should get all activity by coords', function(done) {
 
         var data = {
@@ -63,7 +81,7 @@ describe('[GET] /getActivitesByCity', function() {
             radius:  Math.random(),
             type:"bar"
           }
-          getActivitesByCity(data, function(err, res) {
+          getActivitesByCoords(data, function(err, res) {
             if (err) {
                 assert.strictEqual(1, 0);
             }
@@ -71,4 +89,25 @@ describe('[GET] /getActivitesByCity', function() {
             done();
           });
     });
+
+    it('activity should get return a error', function(done) {
+
+        var data = {
+            coords: "-74.0059728,40.7127753", // coordonnates of nowhere
+            radius:  Math.random(),
+            type:"bar"
+          }
+
+          getActivitesByCoords(data, function(err, res) {
+            if (err) {
+                assert.strictEqual(1, 0);
+            }
+
+            var err = res.body.error;
+            expect(err).to.exist;
+            expect(err).to.equal("Missing data");
+            done();
+          });
+    
+  });
 });

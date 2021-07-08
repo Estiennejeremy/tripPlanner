@@ -23,6 +23,11 @@ module.exports = function (Location) {
       });
 
       console.log(res.candidates[0]);
+      if(!res.candidates[0]) {
+        {
+          return { error: 'Missing data' };
+        }
+      }
       let location = await Location.findOrCreate(
         {
           where: {
