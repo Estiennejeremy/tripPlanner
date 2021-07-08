@@ -23,7 +23,6 @@
           label-placeholder="Email"
           v-model="user.email"
           @change="isEmailValid"
-          name="email"
         />
       </vs-row>
       <vs-row vs-justify="center" class="input-row">
@@ -34,8 +33,7 @@
           label-placeholder="Username"
           v-model="user.username"
           @change="isUsernameValid"
-          type="text"
-          name="username"
+          type="email"
         />
       </vs-row>
       <vs-row vs-justify="center" class="input-row">
@@ -47,7 +45,6 @@
           v-model="user.password"
           @change="isPasswordValid"
           type="password"
-          name="password"
         />
       </vs-row>
       <vs-button

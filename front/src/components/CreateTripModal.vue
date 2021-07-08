@@ -6,7 +6,6 @@
           label="Name"
           v-model="trip.name"
           maxlength="38"
-          name="tripName"
         />
       </vs-row>
       <vs-row vs-justify="center" class="input">
@@ -18,7 +17,6 @@
             types="place"
             @mb-result="res => {getFromLocation(res)}"
             :limit="2"
-            id="fromLocation"
           />
         </div>
       </vs-row>
@@ -29,7 +27,6 @@
           label="Start date"
           v-model="trip.startDate"
           type="date"
-          name="fromDate"
         />
       </vs-row>
       <vs-row vs-justify="center" class="input">
@@ -41,7 +38,6 @@
             types="place"
             :limit="2"
             @mb-result="res => {getToLocation(res)}"
-            id="toLocation"
           />
         </div>
       </vs-row>
@@ -52,7 +48,6 @@
           label="End date"
           v-model="trip.endDate"
           type="date"
-          name="toDate"
         />
       </vs-row>
       <vs-button
