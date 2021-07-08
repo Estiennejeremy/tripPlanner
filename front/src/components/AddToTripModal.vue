@@ -7,6 +7,7 @@
           :key="index"
           :value="trip.id"
           :text="trip.name"
+          id="select-trip"
         />
       </vs-select>
     </vs-row>
