@@ -8,7 +8,7 @@
     "lint": "vue-cli-service lint",
     "dev": "npm run serve",
     "cypress:open": "cypress open",
-    "cypress:run": "cypress run --record --key f88af61b-fa92-4216-a997-ca35052e90c4"
+    "test": "cypress run --record --key f88af61b-fa92-4216-a997-ca35052e90c4"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.3",

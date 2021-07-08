@@ -1,5 +1,5 @@
 /// <reference types="cypress" />
-const dayjs = require('dayjs')
+const dayjs = require("dayjs");
 
 describe("Search an activity", () => {
   beforeEach(() => {
@@ -15,20 +15,44 @@ describe("Search an activity", () => {
   });
 
   it("Suggests cities to the user", () => {
-    cy.get('input.mapboxgl-ctrl-geocoder--input').type("Par");
+    cy.get("input.mapboxgl-ctrl-geocoder--input").type("Par");
     cy.get(".suggestions").should("be.visible");
-    cy.get('input.mapboxgl-ctrl-geocoder--input').type('{enter}')
+    cy.get("input.mapboxgl-ctrl-geocoder--input").type("{enter}");
   });
-  
+
   it("Do a search", () => {
-    cy.get('input.mapboxgl-ctrl-geocoder--input').type("Paris, France");
-    cy.get('li').contains('Restaurant').click({force: true});
-    cy.get('li').contains('Bar').click({force: true});
-    cy.get('input[name="date"]').type('2021-12-12');
-    cy.get("button").contains("Search").click();
+    cy.get("input.mapboxgl-ctrl-geocoder--input").type("Par");
+    cy.wait(500);
+    cy.get("input.mapboxgl-ctrl-geocoder--input").type("{enter}");
+    cy.get("li")
+      .contains("Bar")
+      .click({ force: true });
+    cy.get('input[name="date"]').type("2021-07-20");
+    cy.get("button")
+      .contains("Search")
+      .click();
 
-    cy.url().should("include", "/search/activity?placeId=79&date=2021-12-12&type=restaurant,bar");
+    cy.url().should(
+      "include",
+      "/search/activity?placeId=15&date=2021-07-20&type=bar"
+    );
   });
 
-  
+  it("Perform a search with results on map", () => {
+    cy.visit("/search/activity?placeId=15&date=2021-07-20&type=bar");
+    cy.intercept(
+      "https://trip-planner-10-api.herokuapp.com/api/activities*"
+    ).as("getActivity");
+    cy.wait(2000);
+    cy.get("canvas.mapboxgl-canvas").should("be.visible");
+    const nbResult = cy
+      .get(".activities")
+      .find(".card-content")
+      .its("length");
+    nbResult.should("be.gt", 5);
+    cy.get(".mapboxgl-canvas-container")
+      .find(`[aria-label="Map marker"]`)
+      .its("length")
+      .should('eq', nbResult);
+  });
 });
