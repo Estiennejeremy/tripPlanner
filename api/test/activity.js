@@ -46,7 +46,7 @@ describe('[GET] /getActivitesByCity', function() {
                 assert.strictEqual(1, 0);
             }
             var loc = res.body;
-            expect(loc.name).to.equal("New York, État de New York, États-Unis");
+            expect(loc.name).to.equal("New York, NY, USA");
             expect(loc.lon).to.equal("-74.0059728");
             expect(loc.lat).to.equal("40.7127753");
             deleteLocation(loc.id);
