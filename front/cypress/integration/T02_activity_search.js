@@ -44,7 +44,7 @@ describe("Search an activity", () => {
       "https://trip-planner-10-api.herokuapp.com/api/activities*"
     ).as("getActivity");
     cy.wait(2000);
-    cy.get("canvas.mapboxgl-canvas").should("be.visible");
+    // cy.get("canvas.mapboxgl-canvas").should("be.visible");
     const nbResult = cy
       .get(".activities")
       .find(".card-content")
