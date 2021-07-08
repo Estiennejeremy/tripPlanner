@@ -37,3 +37,32 @@ export async function addTransportToTrip(data) {
     return { error: e };
   }
 }
+
+export async function getAllPlanningByTripId(tripId) {
+  try {
+    const query = JSON.stringify({ where: { travelId: tripId } });
+    const res = await fetch(`${config.api_url}/plannings?filter=${query}`, {
+      method: 'GET',
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+    });
+    return await res.json();
+  } catch (e) {
+    return { error: e };
+  }
+}
+
+export async function deletePlanningById(planningId) {
+  try {
+    const res = await fetch(`${config.api_url}/plannings/${planningId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+    });
+    return await res.json();
+  } catch (e) {
+    return { error: e };
+  }
+}

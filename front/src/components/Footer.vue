@@ -1,7 +1,7 @@
 <template>
   <footer id="footer">
     <h3>
-      Le slogan du siècle 21
+      Plan your next adventure !
     </h3>
   </footer>
 </template>

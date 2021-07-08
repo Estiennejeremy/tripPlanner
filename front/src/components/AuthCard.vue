@@ -40,7 +40,7 @@
         <vs-input
           :success="passwordSuccess"
           :danger="passwordError"
-          danger-text="The password must be at least 6 characters"
+          danger-text="The password must be at least 8 characters"
           label-placeholder="Password"
           v-model="user.password"
           @change="isPasswordValid"
@@ -124,7 +124,7 @@ export default {
       }
     },
     isPasswordValid() {
-      if (this.user.password.length > 5) {
+      if (this.user.password.length > 9) {
         this.passwordSuccess = true;
         this.passwordError = false;
       } else {

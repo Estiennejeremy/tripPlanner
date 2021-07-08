@@ -9,6 +9,7 @@
     "dev": "npm run serve"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.15.3",
     "@mapbox/mapbox-gl-geocoder": "^4.7.0",
     "@studiometa/vue-mapbox-gl": "^1.4.7",
     "core-js": "^3.6.5",
