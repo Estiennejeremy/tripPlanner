@@ -72,10 +72,10 @@ describe("Create a trip", () => {
   it("Should open a trip's page", () => {
     cy.visit("/trips");
     cy.wait(2000);
-    cy.get("span.vs-button-text.vs-button--text")
-    .contains("Open")
-    .click();
-    cy.url().should("include", "/trip?id=");
+    // cy.get("span.vs-button-text.vs-button--text")
+    // .contains("Open")
+    // .click();
+    // cy.url().should("include", "/trip?id=");
     // cy.get("button")
     // .contains("Print my trip")
     // .click({ force: true });
@@ -85,20 +85,5 @@ describe("Create a trip", () => {
     // cy.window().then(win => {
     //     expect(printStub).to.be.calledOnce
     //   })
-  });
-
-  it("Should delete a trip", () => {
-    cy.visit("/trips");
-    cy.wait(2000);
-    cy.get("span.vs-button-text.vs-button--text")
-      .contains("Delete")
-      .click();
-    cy.wait(2000);
-    cy.get(".trip-card").should("not.exist");
-    cy.get("h2")
-      .contains(
-        "Oops ! Seems like you don't have any trips yet... Try adding one !"
-      )
-      .should("be.visible");
   });
 });
