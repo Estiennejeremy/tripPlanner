@@ -24,13 +24,13 @@ describe("Create a trip", () => {
     cy.get('input[name="tripName"]').type(tripName);
     cy.get("#fromLocation").within(() => {
       cy.get(".mapboxgl-ctrl-geocoder--input").type("Madrid");
-      cy.wait(500);
+      cy.wait(1000);
       cy.get("input.mapboxgl-ctrl-geocoder--input").type("{enter}");
     });
     cy.get('input[name="fromDate"]').type("2021-07-22");
     cy.get("#toLocation").within(() => {
       cy.get(".mapboxgl-ctrl-geocoder--input").type("Paris");
-      cy.wait(500);
+      cy.wait(1000);
       cy.get("input.mapboxgl-ctrl-geocoder--input").type("{enter}");
     });
     cy.get('input[name="toDate"]').type("2021-07-30");

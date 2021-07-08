@@ -49,7 +49,7 @@ describe("Sign in", () => {
 
   it("User can't sign in with wrong inputs ", () => {
     cy.get('input[name="username"]').type("user@email.com");
-    cy.get('input[name="password"]').type("hello123");
+    cy.get('input[name="password"]').type("hello123456789");
     cy.get("button")
       .contains("Connection")
       .click();

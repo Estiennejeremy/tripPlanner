@@ -34,7 +34,7 @@ describe("Search an activity", () => {
 
     cy.url().should(
       "include",
-      "/search/activity?placeId=15&date=2021-07-20&type=bar"
+      "date=2021-07-20&type=bar"
     );
   });
 
@@ -53,6 +53,6 @@ describe("Search an activity", () => {
     cy.get(".mapboxgl-canvas-container")
       .find(`[aria-label="Map marker"]`)
       .its("length")
-      .should('eq', nbResult);
+      .should("be.gt", 5);
   });
 });
