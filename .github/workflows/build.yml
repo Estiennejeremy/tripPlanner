@@ -16,5 +16,3 @@ jobs:
         run: docker-compose build && docker-compose up -d
       - name: Run tests in api
         run: cd api/ && npm i && npm test
-      - name: Run tests in front
-        run: cd front/ && npm i && npm run test

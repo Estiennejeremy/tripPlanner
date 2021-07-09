@@ -72,13 +72,13 @@ describe("Create a trip", () => {
   it("Should open a trip's page", () => {
     cy.visit("/trips");
     cy.wait(2000);
-    // cy.get("span.vs-button-text.vs-button--text")
-    // .contains("Open")
-    // .click();
-    // cy.url().should("include", "/trip?id=");
-    // cy.get("button")
-    // .contains("Print my trip")
-    // .click({ force: true });
+    cy.get("span.vs-button-text.vs-button--text")
+    .contains("Open")
+    .click();
+    cy.url().should("include", "/trip?id=");
+    cy.get("button")
+    .contains("Print my trip")
+    .click({ force: true });
     // cy.window().then(win => {
     //   printStub = cy.stub(win, 'printElem')
     // })
