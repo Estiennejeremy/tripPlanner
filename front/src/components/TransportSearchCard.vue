@@ -37,7 +37,7 @@
         vs-align="center"
         class="row-content"
       >
-        {{transportData.duration}} h
+        {{transportData.time}} h
       </vs-row>
     </vs-row>
     <vs-popup
