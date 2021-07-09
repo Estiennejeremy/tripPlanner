@@ -9,7 +9,7 @@ module.exports = function (Planning) {
         !data.date ||
         (!data.transportId && !data.activityId)
       ) {
-        console.log('ici');
+        
         return { error: 'Missing data' };
       }
 
