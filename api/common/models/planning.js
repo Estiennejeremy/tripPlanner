@@ -4,12 +4,12 @@ module.exports = function (Planning) {
   Planning.addActivityToTravel = async function (data) {
     var app = Planning.app;
     try {
-      console.log(data);
       if (
         !data.travelId ||
         !data.date ||
         (!data.transportId && !data.activityId)
       ) {
+        
         return { error: 'Missing data' };
       }
 
@@ -37,8 +37,10 @@ module.exports = function (Planning) {
         const existingTransport = await app.models.Transport.findOne({
           where: { id: data.transportId },
         });
+        if (!existingTransport || existingTransport == null) {
+          return { error: "Transport doesn't exist" };
+        }
 
-        if (!existingTransport) return { error: "Transport doesn't exist" };
         planning = await Planning.create({
           travelId: data.travelId,
           transportId: data.transportId,
